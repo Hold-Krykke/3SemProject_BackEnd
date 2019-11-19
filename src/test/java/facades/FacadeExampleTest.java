@@ -7,14 +7,14 @@ import org.junit.jupiter.api.Test;
 //@Disabled
 public class FacadeExampleTest {
 
-    private static FacadeExample facade;
+    private static CountryFacade facade;
 
     public FacadeExampleTest() {
     }
 
     @BeforeAll
     public static void setUpClassV2() { 
-        facade = FacadeExample.getFacadeExample();
+        facade = CountryFacade.getCountryFacade();
     }
 
     @Test

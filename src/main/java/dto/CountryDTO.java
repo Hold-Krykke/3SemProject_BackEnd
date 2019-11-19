@@ -14,9 +14,11 @@ import java.util.List;
  */
 public class CountryDTO {
 
+    private String name;
     private List<String> cities = new ArrayList<>();
 
-    public CountryDTO() {
+    public CountryDTO(String name) {
+        this.name = name;
     }
 
     public List<String> getCities() {
@@ -30,4 +32,13 @@ public class CountryDTO {
     public void addCity(String city) {
         this.cities.add(city);
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 }

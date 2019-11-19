@@ -81,7 +81,17 @@ public class CountryResourceTest {
                 .contentType("application/json")
                 .get("/resource/WRONG").then()
                 .assertThat()
-                .statusCode(400) 
+                .statusCode(400)
                 .body("message", equalTo("No country by that name exists."));
+    }
+
+    @Test
+    public void testCountryName() throws Exception {
+        given()
+                .contentType("application/json")
+                .get("/resource/countryname/DK").then()
+                .assertThat()
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+                .body("Countryname", equalTo("Denmark"));
     }
 }

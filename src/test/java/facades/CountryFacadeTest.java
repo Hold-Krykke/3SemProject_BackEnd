@@ -51,7 +51,11 @@ public class CountryFacadeTest {
         CountryDTO res = facade.getCountry("Denmark");
         // Assert
         assertEquals(exp, res);
-        
+    }
+    
+    @Test
+    public void testGetCountryname() throws Exception {
+        assertEquals("Denmark", facade.getCountryNameByAlpha2("DK"));
     }
     
 

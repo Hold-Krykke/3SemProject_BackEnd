@@ -4,6 +4,7 @@ package facades;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import java.net.HttpURLConnection;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +25,7 @@ import org.apache.http.client.utils.URIBuilder;
  */
 public class EventFacade {
     private ExecutorService executor = Executors.newCachedThreadPool();
-    private String url = "";
+    private String url = "https://app.ticketmaster.com/discovery/v2/events.json?";
     private String[] ENDPOINTS = {"", "", "", "", ""};
 
 
@@ -54,13 +55,25 @@ public class EventFacade {
 //        return result;
 //    }
 
-    private String getApiData(String url) {
+    public String getApiData(String url, String countrycode, String city, String startdate, String enddate) throws URISyntaxException {
         String result = "";
-        URIBuilder uribuilder = new URIBuilder();
-        uribuilder.addParameter(url, url);
+        String paramCountry = "countryCode";
+        String paramCity = "city";
+        String paramStart = "startDateTime";
+        String paramEnd = "endDateTime";
+        String key = "apikey";
+        String apiKey = "PXLz8SSxwRDS9HUxwZ9LVAkQELNMbma8";
+        URIBuilder uribuilder = new URIBuilder(url);
+        uribuilder.addParameter(paramCountry, countrycode);
+        uribuilder.addParameter(paramCity, city);
+        uribuilder.addParameter(paramStart, startdate);
+        uribuilder.addParameter(paramEnd, enddate);
+        uribuilder.addParameter(key, apiKey);
+        String uri = uribuilder.toString();
+        System.out.println("URL = " + uri);
         
         try {
-            URL siteURL = new URL(url);
+            URL siteURL = new URL(uri);
             HttpURLConnection connection = (HttpURLConnection) siteURL.openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Accept", "application/json;charset=UTF-8");

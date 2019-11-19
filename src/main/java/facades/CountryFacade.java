@@ -13,7 +13,8 @@ import java.util.Scanner;
 public class CountryFacade {
 
     private static CountryFacade instance;
-    private List<CountryDTO> countries = new ArrayList<>();
+    private static List<CountryDTO> countries;
+
     private final String restcountriesURL = "https://restcountries.eu/rest/v2/";
     private final Gson GSON = new Gson();
 
@@ -29,6 +30,9 @@ public class CountryFacade {
     public static CountryFacade getCountryFacade() {
         if (instance == null) {
             instance = new CountryFacade();
+        }
+        if (countries == null || countries.isEmpty()) {
+            getCountriesAndCities();
         }
         return instance;
     }
@@ -47,10 +51,11 @@ public class CountryFacade {
     }
 
     /**
-     * Get Country by Name. 
+     * Get Country by Name.
+     *
      * @param name of the country.
      * @return CountryDTO
-     * @throws NotFoundException 
+     * @throws NotFoundException
      */
     public CountryDTO getCountry(String name) throws NotFoundException {
         CountryDTO country = null;
@@ -70,11 +75,11 @@ public class CountryFacade {
 
     /**
      * Used to get the full name of a country.
+     *
      * @param alpha2 the alpha2 code for the country you want the name of
      * @return Name of country
      */
-    public String getCountryNameByAlpha2(String alpha2) throws NotFoundException
-    {
+    public String getCountryNameByAlpha2(String alpha2) throws NotFoundException {
         String data = getRestcountriesData("alpha/" + alpha2);
         CountryDTO country = GSON.fromJson(data, CountryDTO.class);
         String name = country.getName();
@@ -83,9 +88,10 @@ public class CountryFacade {
         }
         return name;
     }
-    
+
     /**
      * Helper method that fetches data from the restcountries API.
+     *
      * @param uriPart
      * @return JSON fetched data
      */
@@ -100,7 +106,7 @@ public class CountryFacade {
             connection.setRequestProperty("user-agent", "Application");
             try (Scanner scan = new Scanner(connection.getInputStream())) {
                 String response = "";
-                while(scan.hasNext()) {
+                while (scan.hasNext()) {
                     response += scan.nextLine();
                 }
                 result = GSON.fromJson(response, JsonObject.class).toString();
@@ -109,5 +115,11 @@ public class CountryFacade {
             result = "";
         }
         return result;
+    }
+
+    private void getCountriesAndCities() {
+        //We are only here if the list is null or empty, e.g. on a new backend
+        countries = new ArrayList<>(); //init
+        
     }
 }

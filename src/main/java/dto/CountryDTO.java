@@ -21,6 +21,10 @@ public class CountryDTO {
         this.name = name;
     }
 
+    public CountryDTO()
+    {
+    }
+
     public List<String> getCities() {
         return cities;
     }

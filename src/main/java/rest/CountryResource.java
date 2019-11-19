@@ -46,5 +46,17 @@ public class CountryResource {
         return FACADE.getCountry(country);
 
     }
+    
+    /**
+     * Used to get the name of a country given its alpha2 code.
+     * @param alpha2
+     * @return Name of country
+     */
+    @Path("countryname/{alpha2}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getCountryNameByAlpha2(@PathParam(value = "alpha2") final String alpha2) throws NotFoundException {
+        return "{\"Countryname\":\"" + FACADE.getCountryNameByAlpha2(alpha2) + "\"}";
+    }
 
 }

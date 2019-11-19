@@ -32,7 +32,7 @@ public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
         else {
             err = new ExceptionDTO(type.getStatusCode(), type.getReasonPhrase());
         }
-        return Response.status(type.getStatusCode())
+        return Response.status(err.getCode())
                 .entity(gson.toJson(err))
                 .type(MediaType.APPLICATION_JSON).
                 build();

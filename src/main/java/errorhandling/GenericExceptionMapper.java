@@ -26,11 +26,13 @@ public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
         ExceptionDTO err;
         if (ex instanceof WebApplicationException) {
             err = new ExceptionDTO(type.getStatusCode(), ((WebApplicationException) ex).getMessage());
-        } else {
-
+        } else if (ex instanceof NotFoundException){
+            err = new ExceptionDTO(400, ((NotFoundException) ex).getMessage());
+        }
+        else {
             err = new ExceptionDTO(type.getStatusCode(), type.getReasonPhrase());
         }
-        return Response.status(type.getStatusCode())
+        return Response.status(err.getCode())
                 .entity(gson.toJson(err))
                 .type(MediaType.APPLICATION_JSON).
                 build();

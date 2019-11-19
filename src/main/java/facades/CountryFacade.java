@@ -26,7 +26,6 @@ public class CountryFacade {
         return instance;
     }
 
-    //TODO Remove/Change this before use
     public String getFacadeMessage() {
         return "Hello from the facade";
     }

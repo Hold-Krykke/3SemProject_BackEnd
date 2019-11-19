@@ -1,13 +1,17 @@
 package facades;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import dto.CountryDTO;
 import errorhandling.NotFoundException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class CountryFacade {
@@ -16,6 +20,7 @@ public class CountryFacade {
     private static List<CountryDTO> countries;
 
     private final String restcountriesURL = "https://restcountries.eu/rest/v2/";
+    private final String geonamesURL = "http://api.geonames.org/";
     private final Gson GSON = new Gson();
 
     //Private Constructor to ensure Singleton
@@ -32,7 +37,7 @@ public class CountryFacade {
             instance = new CountryFacade();
         }
         if (countries == null || countries.isEmpty()) {
-            getCountriesAndCities();
+            instance.getCountriesAndCities();
         }
         return instance;
     }
@@ -97,7 +102,6 @@ public class CountryFacade {
      */
     private String getRestcountriesData(String uriPart) {
         String url = restcountriesURL + uriPart;
-        String result = "";
         try {
             URL siteURL = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) siteURL.openConnection();
@@ -109,17 +113,53 @@ public class CountryFacade {
                 while (scan.hasNext()) {
                     response += scan.nextLine();
                 }
-                result = GSON.fromJson(response, JsonObject.class).toString();
+                JsonParser jsonParser = new JsonParser();
+                JsonElement jsonElement = jsonParser.parse(response);
+                if (jsonElement.isJsonObject()) {
+                    return GSON.fromJson(response, JsonObject.class).toString();
+                } else if (jsonElement.isJsonArray()) {
+                    return GSON.fromJson(response, JsonArray.class).toString();
+                }
             }
         } catch (Exception e) {
-            result = "";
         }
-        return result;
+        return "";
     }
 
+    /**
+     * Sets the facades 'countries' arraylist to hold its DTO's
+     *
+     * Takes use of getRestcountriesData() and gets a list of european countries
+     * and their ISO 3166-1 2-letter country code. (dk, se, no, gb, de, fr, es,
+     * etc)
+     *
+     * Following that it grabs information about cities, sorted by country and
+     * population.
+     *
+     * This information - countryName and a list of cities - is set on the
+     * facades arraylist 'countries'
+     *
+     * Follows CountryDTO format of {countryName:city1,city2,city3...}
+     */
     private void getCountriesAndCities() {
-        //We are only here if the list is null or empty, e.g. on a new backend
+        //We are only here if the list is null or empty, e.g. on a new backend or an error happened
+        System.out.println(countries);
         countries = new ArrayList<>(); //init
-        
+        //List<String> countryCodes = new ArrayList();
+        //http://api.geonames.org/search?username=holdkrykke&country=dk&orderby=population&type=json&featureClass=P&maxRows=10
+
+        String data = getRestcountriesData("region/europe?fields=name;alpha2Code");
+        JsonArray country = GSON.fromJson(data, JsonArray.class);
+        for (int i = 0; i < country.size(); i++) {
+            JsonObject obj = country.get(i).getAsJsonObject();
+            String countryName = obj.get("name").toString();
+            String countryCode = obj.get("alpha2Code").toString();
+            System.out.println("name: " + countryName + " countryCode: " + countryCode + "\n");
+        }
+
+        System.out.println("euCountriesData:\n" + data);
+       
+        //brug addCountry
+        //getCities(countries); //how to handle exactly?
     }
 }

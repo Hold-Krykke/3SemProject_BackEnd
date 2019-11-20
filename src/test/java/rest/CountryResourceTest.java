@@ -1,11 +1,11 @@
 package rest;
 
+import dto.CityDTO;
 import dto.CountryDTO;
 import facades.CountryFacade;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
 import io.restassured.parsing.Parser;
-import io.restassured.path.json.JsonPath;
 import java.net.URI;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.UriBuilder;
@@ -42,15 +42,13 @@ public class CountryResourceTest {
         RestAssured.baseURI = SERVER_URL;
         RestAssured.port = SERVER_PORT;
         RestAssured.defaultParser = Parser.JSON;
-        
-        
-        CountryDTO denmark = new CountryDTO();
-        denmark.setName("Denmark");
-        denmark.addCity("Koebenhavn");
-        denmark.addCity("Aalborg");
-        denmark.addCity("Aarhus");
-        denmark.addCity("Odense");
-        denmark.addCity("Roskilde");
+
+        CountryDTO denmark = new CountryDTO("Denmark");
+        denmark.addCity(new CityDTO("Koebenhavn"));
+        denmark.addCity(new CityDTO("Aalborg"));
+        denmark.addCity(new CityDTO("Aarhus"));
+        denmark.addCity(new CityDTO("Odense"));
+        denmark.addCity(new CityDTO("Roskilde"));
         facade.addCountry(denmark);
     }
 
@@ -98,7 +96,7 @@ public class CountryResourceTest {
                 .statusCode(400)
                 .body("message", equalTo("No country by that name exists."));
     }
-    
+
     @Test
     public void testGetCountry() throws Exception {
         given()
@@ -122,7 +120,7 @@ public class CountryResourceTest {
                 .statusCode(HttpStatus.OK_200.getStatusCode())
                 .body("Countryname", equalTo("Denmark"));
     }
-    
+
     @Test
     public void testCountryNameWrong() throws Exception {
         given()

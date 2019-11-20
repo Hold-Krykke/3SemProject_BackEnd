@@ -11,7 +11,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 public class CountryFacade {
@@ -65,7 +64,7 @@ public class CountryFacade {
     public CountryDTO getCountry(String name) throws NotFoundException {
         CountryDTO country = null;
         for (CountryDTO c : this.countries) {
-            if (c.getName().equals(name)) {
+            if (c.getCountryName().equals(name)) {
                 country = c;
             }
         }
@@ -87,7 +86,7 @@ public class CountryFacade {
     public String getCountryNameByAlpha2(String alpha2) throws NotFoundException {
         String data = getRestcountriesData("alpha/" + alpha2);
         CountryDTO country = GSON.fromJson(data, CountryDTO.class);
-        String name = country.getName();
+        String name = country.getCountryName();
         if (name == null || name.isEmpty()) {
             throw new NotFoundException("No country with given alpha2 code found");
         }
@@ -154,7 +153,7 @@ public class CountryFacade {
             JsonObject obj = country.get(i).getAsJsonObject();
             String countryName = obj.get("name").toString();
             String countryCode = obj.get("alpha2Code").toString();
-            System.out.println("name: " + countryName + " countryCode: " + countryCode + "\n");
+            System.out.println("name: " + countryName + " countryCode: " + countryCode);
         }
 
         System.out.println("euCountriesData:\n" + data);

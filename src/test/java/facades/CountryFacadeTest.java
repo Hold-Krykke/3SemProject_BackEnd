@@ -21,7 +21,7 @@ public class CountryFacadeTest {
     }
 
     @BeforeAll
-    public static void setUpClass() { 
+    public static void setUpClass() {
         facade = CountryFacade.getCountryFacade();
         denmark = new CountryDTO("Denmark");
         denmark.addCity(new CityDTO("Aarhus"));
@@ -29,22 +29,22 @@ public class CountryFacadeTest {
         denmark.addCity(new CityDTO("Aalborg"));
         facade.addCountry(denmark);
     }
-    
+
     @BeforeEach
     public void setUpTest() {
-        
+
     }
-    
+
     @AfterEach
     public void tearDownTest() {
-        
+
     }
 
     @Test
     public void testAFacadeMethod() {
         assertEquals("Hello from the facade", facade.getFacadeMessage(), "Expects a facade message");
     }
-    
+
     @Test
     public void testGetCountry() throws NotFoundException {
         // Arrange
@@ -54,24 +54,24 @@ public class CountryFacadeTest {
         // Assert
         assertEquals(exp, res);
     }
-    
+
     @Test
     public void testGetCountryWrong() {
         Assertions.assertThrows(NotFoundException.class, () -> {
             facade.getCountry("WRONGCOUNTRY");
         });
     }
-    
+
     @Test
     public void testGetCountryname() throws Exception {
-        assertEquals("Denmark", facade.getCountryNameByAlpha2("DK"));
+        assertEquals("Denmark", facade.getCountryNameByAlpha2("dk"));
     }
-    
-    @Test public void testGetCountryNameWrong() {
+
+    @Test
+    public void testGetCountryNameWrong() {
         Assertions.assertThrows(NotFoundException.class, () -> {
             facade.getCountryNameByAlpha2("WRONGCOUNTRY");
         });
     }
-    
 
 }

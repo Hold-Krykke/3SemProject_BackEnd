@@ -104,11 +104,11 @@ public class CountryResourceTest {
                 .get("/resource/Denmark").then()
                 .assertThat()
                 .statusCode(200)
-                .body("cities[0]", equalTo("Koebenhavn"))
-                .body("cities[1]", equalTo("Aalborg"))
-                .body("cities[2]", equalTo("Aarhus"))
-                .body("cities[3]", equalTo("Odense"))
-                .body("cities[4]", equalTo("Roskilde"));
+                .body("cities[0].cityName", equalTo("Koebenhavn"))
+                .body("cities[1].cityName", equalTo("Aalborg"))
+                .body("cities[2].cityName", equalTo("Aarhus"))
+                .body("cities[3].cityName", equalTo("Odense"))
+                .body("cities[4].cityName", equalTo("Roskilde"));
     }
 
     @Test

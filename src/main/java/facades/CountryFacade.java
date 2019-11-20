@@ -16,7 +16,7 @@ import java.util.Scanner;
 public class CountryFacade {
 
     private static CountryFacade instance;
-    private static List<CountryDTO> countries;
+    private static List<CountryDTO> countries = new ArrayList();
 
     private final String restcountriesURL = "https://restcountries.eu/rest/v2/";
     private final String geonamesURL = "http://api.geonames.org/";
@@ -36,7 +36,7 @@ public class CountryFacade {
             instance = new CountryFacade();
         }
         if (countries == null || countries.isEmpty()) {
-            instance.getCountriesAndCities();
+            //instance.getCountriesAndCities(); //disabled until finished
         }
         return instance;
     }
@@ -83,16 +83,14 @@ public class CountryFacade {
      * @param alpha2 the alpha2 code for the country you want the name of
      * @return Name of country
      */
-    public String getCountryNameByAlpha2(String alpha2) throws NotFoundException
-    {
-        CountryDTO country = new CountryDTO();
+    public String getCountryNameByAlpha2(String alpha2) throws NotFoundException {
+        JsonObject country = new JsonObject();
         String data = getRestcountriesData("alpha/" + alpha2);
-        country = GSON.fromJson(data, CountryDTO.class);
-        if (country == null || country.getCountryName()== null || country.getCountryName().isEmpty()) {
+        country = GSON.fromJson(data, JsonObject.class);
+        if (country == null || country.get("name") == null) {
             throw new NotFoundException("No country with given alpha2 code found");
         }
-        String name = country.getCountryName();
-        return name;
+        return country.get("name").getAsString();
     }
 
     /**
@@ -159,7 +157,7 @@ public class CountryFacade {
         }
 
         System.out.println("euCountriesData:\n" + data);
-       
+
         //brug addCountry
         //getCities(countries); //how to handle exactly?
     }

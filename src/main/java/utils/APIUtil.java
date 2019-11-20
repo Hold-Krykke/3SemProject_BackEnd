@@ -19,6 +19,14 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeoutException;
 
+/**
+ * As a start, this class is only meant for handling multiple endpoint calls
+ * using threads.
+ *
+ * If we in the future find need for other utils, they can be added here or in
+ * this package.
+ *
+ */
 public class APIUtil {
 
     private static final ExecutorService EXECUTOR = Executors.newCachedThreadPool();

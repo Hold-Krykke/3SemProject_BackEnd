@@ -2,7 +2,6 @@ package facades;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 import dto.CountryDTO;
 import errorhandling.NotFoundException;
 import java.net.HttpURLConnection;

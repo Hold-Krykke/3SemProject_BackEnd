@@ -5,7 +5,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.sun.org.apache.bcel.internal.generic.AALOAD;
 import facades.CountryFacade;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -27,11 +26,13 @@ import java.util.concurrent.TimeoutException;
  * If we in the future find need for other utils, they can be added here or in
  * this package.
  *
+ * If this class is improved upon with new features, consider moving the
+ * ExecutorService out of getApiData()
+ *
  */
 public class APIUtil {
 
-    private static final ExecutorService EXECUTOR = Executors.newCachedThreadPool();
-    private static final Gson GSON = new Gson();
+    private Gson GSON = new Gson();
 
     /**
      * Feed this method with a list of endpoints and it will return a collection
@@ -57,11 +58,12 @@ public class APIUtil {
      * @throws TimeoutException
      */
     public List<String> getApiData(ArrayList<String> endpoints) throws InterruptedException, ExecutionException, TimeoutException {
+        ExecutorService executor = Executors.newCachedThreadPool();
         List<String> result = new ArrayList();
         Queue<Future<String>> queue = new ArrayBlockingQueue(endpoints.size());
 
         for (String endpoint : endpoints) {
-            Future<String> future = EXECUTOR.submit(() -> getData(endpoint));
+            Future<String> future = executor.submit(() -> getData(endpoint));
             queue.add(future);
         }
 
@@ -73,7 +75,7 @@ public class APIUtil {
                 queue.add(data);
             }
         }
-        EXECUTOR.shutdown();
+        executor.shutdown();
         return result;
     }
 
@@ -83,6 +85,8 @@ public class APIUtil {
      *
      * @param url endpoint in question (full url - that meaning
      * https://www.api.example.com/example/exampledata)
+     *
+     * Would be nice to be able to dynamically set headers.
      * @return
      */
     private String getData(String url) {
@@ -104,8 +108,10 @@ public class APIUtil {
                 } else if (jsonElement.isJsonArray()) {
                     return GSON.fromJson(response, JsonArray.class).toString();
                 }
+                return response;
             }
         } catch (Exception e) {
+            System.out.println(e);
         }
         return "";
     }

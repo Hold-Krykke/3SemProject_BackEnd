@@ -2,24 +2,16 @@
 package facades;
 
 import ch.hsr.geohash.GeoHash;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Queue;
 import java.util.Scanner;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeoutException;
 import org.apache.http.client.utils.URIBuilder;
-
+import com.google.gson.Gson;
+// import com.google.gson.Gson;
 /**
  *
  * @author Camilla
@@ -57,11 +49,6 @@ public class EventFacade {
 //    }
 
     public String getApiData(Double latitude, Double longitude, String url, String startdate, String enddate) throws URISyntaxException {
-        // lat         long
-        // 55.681554, 12.591135
-        String result = "";
-        
-        //String paramCountry = "countryCode";
         String paramGeoHash = "geoPoint";
         String paramRadius = "radius";
         String paramRadiusVal = "5";
@@ -71,12 +58,7 @@ public class EventFacade {
         String key = "apikey";
         String apiKey = "PXLz8SSxwRDS9HUxwZ9LVAkQELNMbma8";
         
-//        GeoHashPoint geo = new GeoHashPoint(latitude, longitude);
-//        String geohash = GeoHashExtensions.encode(53.5526394, 10.0067103);
-
-       // GeoHash geoHash = GeoHash.withCharacterPrecision(latitude, longitude, 6);
-       String paramGeohashVal = GeoHash.geoHashStringWithCharacterPrecision(latitude, longitude, 10);
-       //String paramGeohashVal = Integer.toString(geoHash.getPoint().hashCode());
+       String paramGeohashVal = GeoHash.geoHashStringWithCharacterPrecision(latitude, longitude, 9);
         
         URIBuilder uribuilder = new URIBuilder(url);
         uribuilder.addParameter(paramGeoHash, paramGeohashVal);
@@ -86,10 +68,8 @@ public class EventFacade {
         uribuilder.addParameter(paramEnd, enddate);
         uribuilder.addParameter(key, apiKey);
         
-        
         String uri = uribuilder.toString();
-        System.out.println("URL = " + uri);
-        
+        System.out.println("URL: " + uri);
         try {
             URL siteURL = new URL(uri);
             HttpURLConnection connection = (HttpURLConnection) siteURL.openConnection();
@@ -102,12 +82,12 @@ public class EventFacade {
                 while(scan.hasNext()) {
                     response += scan.nextLine();
                 }
-                Gson gson = new Gson();
-                result = gson.fromJson(response, JsonObject.class).toString();
+                Gson gson = new Gson();               
+                return gson.fromJson(response, JsonObject.class).toString();
             }
         } catch (Exception e) {
-            result = "";
+            System.out.println(e.getMessage());
+            return "";
         }
-        return result;
     }
 }

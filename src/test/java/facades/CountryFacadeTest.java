@@ -2,7 +2,9 @@ package facades;
 
 import dto.CountryDTO;
 import errorhandling.NotFoundException;
+import javax.ws.rs.WebApplicationException;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,7 +53,24 @@ public class CountryFacadeTest {
         CountryDTO res = facade.getCountry("Denmark");
         // Assert
         assertEquals(exp, res);
-        
+    }
+    
+    @Test
+    public void testGetCountryWrong() {
+        Assertions.assertThrows(NotFoundException.class, () -> {
+            facade.getCountry("WRONGCOUNTRY");
+        });
+    }
+    
+    @Test
+    public void testGetCountryname() throws Exception {
+        assertEquals("Denmark", facade.getCountryNameByAlpha2("DK"));
+    }
+    
+    @Test public void testGetCountryNameWrong() {
+        Assertions.assertThrows(NotFoundException.class, () -> {
+            facade.getCountryNameByAlpha2("WRONGCOUNTRY");
+        });
     }
     
 

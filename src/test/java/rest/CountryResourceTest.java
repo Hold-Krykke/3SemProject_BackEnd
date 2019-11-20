@@ -1,8 +1,11 @@
 package rest;
 
+import dto.CountryDTO;
+import facades.CountryFacade;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
 import io.restassured.parsing.Parser;
+import io.restassured.path.json.JsonPath;
 import java.net.URI;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.UriBuilder;
@@ -25,6 +28,7 @@ public class CountryResourceTest {
     static final URI BASE_URI = UriBuilder.fromUri(SERVER_URL).port(SERVER_PORT).build();
     private static HttpServer httpServer;
     private static EntityManagerFactory emf;
+    private static CountryFacade facade = CountryFacade.getCountryFacade();
 
     static HttpServer startServer() {
         ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
@@ -38,6 +42,16 @@ public class CountryResourceTest {
         RestAssured.baseURI = SERVER_URL;
         RestAssured.port = SERVER_PORT;
         RestAssured.defaultParser = Parser.JSON;
+        
+        
+        CountryDTO denmark = new CountryDTO();
+        denmark.setName("Denmark");
+        denmark.addCity("Koebenhavn");
+        denmark.addCity("Aalborg");
+        denmark.addCity("Aarhus");
+        denmark.addCity("Odense");
+        denmark.addCity("Roskilde");
+        facade.addCountry(denmark);
     }
 
     @AfterAll
@@ -83,6 +97,20 @@ public class CountryResourceTest {
                 .assertThat()
                 .statusCode(400)
                 .body("message", equalTo("No country by that name exists."));
+    }
+    
+    @Test
+    public void testGetCountry() throws Exception {
+        given()
+                .contentType("application/json")
+                .get("/resource/Denmark").then()
+                .assertThat()
+                .statusCode(200)
+                .body("cities[0]", equalTo("Koebenhavn"))
+                .body("cities[1]", equalTo("Aalborg"))
+                .body("cities[2]", equalTo("Aarhus"))
+                .body("cities[3]", equalTo("Odense"))
+                .body("cities[4]", equalTo("Roskilde"));
     }
 
     @Test

@@ -1,5 +1,6 @@
 package facades;
 
+import dto.CityDTO;
 import dto.CountryDTO;
 import errorhandling.NotFoundException;
 import org.junit.jupiter.api.AfterEach;
@@ -21,10 +22,9 @@ public class CountryFacadeTest {
     public static void setUpClass() { 
         facade = CountryFacade.getCountryFacade();
         denmark = new CountryDTO("Denmark");
-        denmark.addCity("Koebenhavn");
-        denmark.addCity("Aarhus");
-        denmark.addCity("Odense");
-        denmark.addCity("Aalborg");
+        denmark.addCity(new CityDTO("Aarhus"));
+        denmark.addCity(new CityDTO("Odense"));
+        denmark.addCity(new CityDTO("Aalborg"));
         facade.addCountry(denmark);
     }
     

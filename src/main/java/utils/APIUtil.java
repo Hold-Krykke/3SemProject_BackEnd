@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.sun.org.apache.bcel.internal.generic.AALOAD;
 import facades.CountryFacade;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -45,6 +46,9 @@ public class APIUtil {
      * in that array. Use JsonObject/JsonElement (Gson) and check every item
      * with get/getProperty. For an example, see getCountriesAndCities()
      * @see CountryFacade#getCountriesAndCities()
+     *
+     * For an example of usage, see its test in {Test
+     * Packages\\utils\\APIUtilTest.java}
      *
      * @return returns a list of the data at the given endpoints.
      * @see APIUtil#getData(java.lang.String)

@@ -1,6 +1,7 @@
 
 package facades;
 
+import ch.hsr.geohash.GeoHash;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import java.net.HttpURLConnection;
@@ -55,12 +56,13 @@ public class EventFacade {
 //        return result;
 //    }
 
-    public String getApiData(Double latitude, Double longitude, String url, String countrycode, String startdate, String enddate) throws URISyntaxException {
+    public String getApiData(Double latitude, Double longitude, String url, String startdate, String enddate) throws URISyntaxException {
         // lat         long
         // 55.681554, 12.591135
         String result = "";
         
-        String paramCountry = "countryCode";
+        //String paramCountry = "countryCode";
+        String paramGeoHash = "geoPoint";
         String paramRadius = "radius";
         String paramRadiusVal = "5";
         String paramUnit = "unit";
@@ -69,8 +71,15 @@ public class EventFacade {
         String key = "apikey";
         String apiKey = "PXLz8SSxwRDS9HUxwZ9LVAkQELNMbma8";
         
+//        GeoHashPoint geo = new GeoHashPoint(latitude, longitude);
+//        String geohash = GeoHashExtensions.encode(53.5526394, 10.0067103);
+
+       // GeoHash geoHash = GeoHash.withCharacterPrecision(latitude, longitude, 6);
+       String paramGeohashVal = GeoHash.geoHashStringWithCharacterPrecision(latitude, longitude, 10);
+       //String paramGeohashVal = Integer.toString(geoHash.getPoint().hashCode());
+        
         URIBuilder uribuilder = new URIBuilder(url);
-        uribuilder.addParameter(paramCountry, countrycode);
+        uribuilder.addParameter(paramGeoHash, paramGeohashVal);
         uribuilder.addParameter(paramRadius, paramRadiusVal);
         uribuilder.addParameter(paramUnit, "km");
         uribuilder.addParameter(paramStart, startdate);

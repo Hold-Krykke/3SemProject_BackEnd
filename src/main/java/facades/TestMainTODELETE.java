@@ -10,8 +10,9 @@ public class TestMainTODELETE {
     public static void main(String[] args) throws Exception {
         EventFacade facade = new EventFacade();
         Gson gson = new Gson();
-        System.out.println(gson.toJson(facade.getApiData(55.681554, 12.591135, "https://app.ticketmaster.com/discovery/v2/events.json?", "DK", "2019-11-23T00:00:00Z", "2019-11-25T23:59:59Z" )));
+        System.out.println(gson.toJson(facade.getApiData(55.681554, 12.591135, "https://app.ticketmaster.com/discovery/v2/events.json?", "2019-11-23T00:00:00Z", "2019-11-25T23:59:59Z" )));
         
+        // (Double latitude, Double longitude, String url, String startdate, String enddate)
         // (Double latitude, Double longitude, String url, String countrycode, String startdate, String enddate)
         // 2015-02-01T10:00:00Z
         // 2019-11-23T23:59:59Z

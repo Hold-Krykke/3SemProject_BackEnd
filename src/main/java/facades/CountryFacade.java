@@ -36,7 +36,7 @@ public class CountryFacade {
             instance = new CountryFacade();
         }
         if (countries == null || countries.isEmpty()) {
-            instance.getCountriesAndCities();
+            //instance.getCountriesAndCities(); //disabled until finished.
         }
         return instance;
     }

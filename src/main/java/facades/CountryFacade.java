@@ -88,10 +88,10 @@ public class CountryFacade {
         CountryDTO country = new CountryDTO();
         String data = getRestcountriesData("alpha/" + alpha2);
         country = GSON.fromJson(data, CountryDTO.class);
-        if (country == null || country.getName() == null || country.getName().isEmpty()) {
+        if (country == null || country.getCountryName()== null || country.getCountryName().isEmpty()) {
             throw new NotFoundException("No country with given alpha2 code found");
         }
-        String name = country.getName();
+        String name = country.getCountryName();
         return name;
     }
 

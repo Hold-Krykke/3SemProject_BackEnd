@@ -122,4 +122,14 @@ public class CountryResourceTest {
                 .statusCode(HttpStatus.OK_200.getStatusCode())
                 .body("Countryname", equalTo("Denmark"));
     }
+    
+    @Test
+    public void testCountryNameWrong() throws Exception {
+        given()
+                .contentType("application/json")
+                .get("/resource/countryname/WRONG").then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode())
+                .body("message", equalTo("No country with given alpha2 code found"));
+    }
 }

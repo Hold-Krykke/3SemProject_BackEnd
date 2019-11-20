@@ -55,20 +55,29 @@ public class EventFacade {
 //        return result;
 //    }
 
-    public String getApiData(String url, String countrycode, String city, String startdate, String enddate) throws URISyntaxException {
+    public String getApiData(Double latitude, Double longitude, String url, String countrycode, String startdate, String enddate) throws URISyntaxException {
+        // lat         long
+        // 55.681554, 12.591135
         String result = "";
+        
         String paramCountry = "countryCode";
-        String paramCity = "city";
+        String paramRadius = "radius";
+        String paramRadiusVal = "5";
+        String paramUnit = "unit";
         String paramStart = "startDateTime";
         String paramEnd = "endDateTime";
         String key = "apikey";
         String apiKey = "PXLz8SSxwRDS9HUxwZ9LVAkQELNMbma8";
+        
         URIBuilder uribuilder = new URIBuilder(url);
         uribuilder.addParameter(paramCountry, countrycode);
-        uribuilder.addParameter(paramCity, city);
+        uribuilder.addParameter(paramRadius, paramRadiusVal);
+        uribuilder.addParameter(paramUnit, "km");
         uribuilder.addParameter(paramStart, startdate);
         uribuilder.addParameter(paramEnd, enddate);
         uribuilder.addParameter(key, apiKey);
+        
+        
         String uri = uribuilder.toString();
         System.out.println("URL = " + uri);
         

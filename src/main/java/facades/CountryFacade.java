@@ -2,6 +2,7 @@ package facades;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import dto.CountryDTO;
 import errorhandling.NotFoundException;
 import java.net.HttpURLConnection;
@@ -75,12 +76,13 @@ public class CountryFacade {
      */
     public String getCountryNameByAlpha2(String alpha2) throws NotFoundException
     {
+        CountryDTO country = new CountryDTO();
         String data = getRestcountriesData("alpha/" + alpha2);
-        CountryDTO country = GSON.fromJson(data, CountryDTO.class);
-        String name = country.getName();
-        if (name == null || name.isEmpty()) {
+        country = GSON.fromJson(data, CountryDTO.class);
+        if (country == null || country.getName() == null || country.getName().isEmpty()) {
             throw new NotFoundException("No country with given alpha2 code found");
         }
+        String name = country.getName();
         return name;
     }
     

@@ -11,14 +11,31 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.apache.http.client.utils.URIBuilder;
 import com.google.gson.Gson;
+import dto.CountryDTO;
+import java.util.ArrayList;
+import java.util.List;
 // import com.google.gson.Gson;
 /**
  *
  * @author Camilla
  */
 public class EventFacade {
-    private String baseURL = "https://app.ticketmaster.com/discovery/v2/events.json?";
-
+    
+    private static EventFacade instance;
+    private final String baseURL = "https://app.ticketmaster.com/discovery/v2/events.json?";
+    private final Gson GSON = new Gson();
+    
+    private EventFacade() {
+    }
+    
+    public static EventFacade getEventFacade() {
+        if (instance == null) {
+            instance = new EventFacade();
+        }
+        return instance;
+    }
+    
+    
     public String getApiData(Double latitude, Double longitude, String startdate, String enddate) throws URISyntaxException {
         String paramGeoHash = "geoPoint";
         String paramRadius = "radius";

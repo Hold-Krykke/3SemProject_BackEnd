@@ -8,8 +8,11 @@ import java.net.URL;
 import java.util.Scanner;
 import org.apache.http.client.utils.URIBuilder;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import dto.CityDTO;
 import dto.LocationDateDTO;
+import errorhandling.NotFoundException;
+import java.io.IOException;
 
 /**
  *
@@ -35,7 +38,7 @@ public class EventFacade {
     }
 
     /**
-     * Get data from the ticketmaster API. Calls the private methods
+     * Get data from the ticketmaster API.Calls the private methods
      * uriBuilder(), which builds the uri with the help of calculateRadius() and
      * then the callApi() is called with the uri and the answer from
      * ticketmaster is returned as a String.
@@ -43,8 +46,9 @@ public class EventFacade {
      * @param locDate LocationDateDTO
      * @param city CityDTO
      * @return String response from ticketmaster API
+     * @throws errorhandling.NotFoundException
      */
-    public String getApiData(LocationDateDTO locDate, CityDTO city) {
+    public String getApiData(LocationDateDTO locDate, CityDTO city) throws NotFoundException {
 
         String uri = uriBuilder(Double.parseDouble(city.getLatitude()), Double.parseDouble(city.getLongitude()),
                 locDate.getStartdate(), locDate.getEnddate(), calculateRadius(city.getPopulation()));
@@ -72,9 +76,13 @@ public class EventFacade {
 
     /**
      * The uriBuilder uses the apache Class URIBuilder to create the uri for the
-     * ticketmaster API. The API prefers that locations are hashed to a geohash,
-     * and to achieve this we use the library geohash-java
-     * (https://github.com/kungfoo/geohash-java).
+     * ticketmaster API. The API prefers that locations are hashed to a geohash
+     * or geopoint and to achieve this we use the library geohash-java
+     * (https://github.com/kungfoo/geohash-java). 
+     * To create the geohash, the latitude and longitude of a location is 
+     * needed along with a value representing the number of characters in the 
+     * geohash. The longer the hash the more precise the location. The ticketmaster
+     * Api doesn't accpet geohashes longer than 9 characters. 
      *
      *
      * @param latitude
@@ -83,8 +91,9 @@ public class EventFacade {
      * @param enddate
      * @param calcRadius
      * @return String representation of the build uri
+     * @throws errorhandling.NotFoundException
      */
-    private String uriBuilder(Double latitude, Double longitude, String startdate, String enddate, String calcRadius) {
+    private String uriBuilder(Double latitude, Double longitude, String startdate, String enddate, String calcRadius) throws NotFoundException {
         try {
             String paramGeoHash = "geoPoint";
             String paramRadius = "radius";
@@ -107,8 +116,7 @@ public class EventFacade {
             return uribuilder.toString();
 
         } catch (URISyntaxException e) {
-            System.out.println(e.getMessage());
-            return "";
+            throw new NotFoundException(e.getMessage());
         }
     }
 
@@ -118,8 +126,9 @@ public class EventFacade {
      * 
      * @param uri
      * @return String representation of the response
+     * @throws errorhandling.NotFoundException
      */
-    private String callApi(String uri) {
+    private String callApi(String uri) throws NotFoundException {
         try {
             URL siteURL = new URL(uri);
             HttpURLConnection connection = (HttpURLConnection) siteURL.openConnection();
@@ -134,9 +143,8 @@ public class EventFacade {
                 }
                 return GSON.fromJson(response, JsonObject.class).toString();
             }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return "";
+        } catch (JsonSyntaxException | IOException e) {
+            throw new NotFoundException(e.getMessage());
         }
     }
 }

@@ -42,7 +42,7 @@ public class LocationDateDTO {
     }
 
     /**
-     * Set startdate in format "2019-11-23"
+     * Set startdate in format "YYYY-MM-DD" and only in this format. 
      * @param startdate
      */
     public void setStartdate(String startdate) {
@@ -58,7 +58,7 @@ public class LocationDateDTO {
     }
 
     /**
-     * Set enddate in format "2019-11-23"
+     * Set enddate in format "YYYY-MM-DD" and only in this format.
      * @param enddate
      */
     public void setEnddate(String enddate) {

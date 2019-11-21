@@ -10,6 +10,9 @@ import errorhandling.NotFoundException;
 import facades.CountryFacade;
 import facades.EventFacade;
 import java.util.List;
+import errorhandling.APIUtilException;
+import errorhandling.NotFoundException;
+import facades.CountryFacade;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -20,9 +23,16 @@ import javax.ws.rs.core.MediaType;
 @Path("resource")
 public class CountryResource {
 
-    private static final CountryFacade FACADE = CountryFacade.getCountryFacade();
+
     private static final EventFacade EVENTFACADE = EventFacade.getEventFacade();
+
+    private static CountryFacade FACADE;
+
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+
+    public CountryResource() throws APIUtilException {
+        FACADE = CountryFacade.getCountryFacade();
+    }
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})

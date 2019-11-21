@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import errorhandling.APIUtilException;
 import facades.CountryFacade;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -17,7 +18,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeoutException;
 
 /**
  * As a start, this class is only meant for handling multiple endpoint calls
@@ -41,6 +41,9 @@ public class APIUtil {
      * @param endpoints a list of URLS you wish to access. (full URLs, example:
      * https://www.api.example.com/example/exampledata))
      *
+     * Please note this is currently only for JSON, and only a certain type of
+     * JSON, as it takes use of the strict JsonParser.
+     *
      * How to use the returned data:
      *
      * Convert the string into a JsonArray (Gson) and run through every element
@@ -53,11 +56,8 @@ public class APIUtil {
      *
      * @return returns a list of the data at the given endpoints.
      * @see APIUtil#getData(java.lang.String)
-     * @throws InterruptedException
-     * @throws ExecutionException
-     * @throws TimeoutException
      */
-    public List<String> getApiData(ArrayList<String> endpoints) throws InterruptedException, ExecutionException, TimeoutException {
+    public List<String> getApiData(ArrayList<String> endpoints) throws APIUtilException {
         ExecutorService executor = Executors.newCachedThreadPool();
         List<String> result = new ArrayList();
         Queue<Future<String>> queue = new ArrayBlockingQueue(endpoints.size());
@@ -70,7 +70,11 @@ public class APIUtil {
         while (!queue.isEmpty()) {
             Future<String> data = queue.poll();
             if (data.isDone()) {
-                result.add(data.get());
+                try {
+                    result.add(data.get());
+                } catch (InterruptedException | ExecutionException ex) {
+                    throw new APIUtilException("Something went wrong with the future: " + ex.getMessage());
+                }
             } else {
                 queue.add(data);
             }
@@ -89,7 +93,7 @@ public class APIUtil {
      * Would be nice to be able to dynamically set headers.
      * @return
      */
-    private String getData(String url) {
+    private String getData(String url) throws APIUtilException {
         try {
             URL siteURL = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) siteURL.openConnection();
@@ -111,8 +115,7 @@ public class APIUtil {
                 return response;
             }
         } catch (Exception e) {
-            System.out.println(e);
+            throw new APIUtilException("API request went wrong:" + e.getMessage());
         }
-        return "";
     }
 }

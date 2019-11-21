@@ -110,6 +110,7 @@ public class CountryDTO {
 
     @Override
     public String toString() {
-        return "CountryDTO{" + "countryName=" + countryName + ", cities=" + cities + '}';
+        return "CountryDTO{" + "countryName=" + countryName + ", countryCode=" + countryCode + ", cities=" + cities + '}';
     }
+
 }

@@ -2,6 +2,7 @@ package rest;
 
 import dto.CityDTO;
 import dto.CountryDTO;
+import errorhandling.APIUtilException;
 import facades.CountryFacade;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
@@ -28,7 +29,7 @@ public class CountryResourceTest {
     static final URI BASE_URI = UriBuilder.fromUri(SERVER_URL).port(SERVER_PORT).build();
     private static HttpServer httpServer;
     private static EntityManagerFactory emf;
-    private static CountryFacade facade = CountryFacade.getCountryFacade();
+    private static CountryFacade facade;
 
     static HttpServer startServer() {
         ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
@@ -36,12 +37,13 @@ public class CountryResourceTest {
     }
 
     @BeforeAll
-    public static void setUpClass() {
+    public static void setUpClass() throws Exception {
         httpServer = startServer();
         //Setup RestAssured
         RestAssured.baseURI = SERVER_URL;
         RestAssured.port = SERVER_PORT;
         RestAssured.defaultParser = Parser.JSON;
+        facade = CountryFacade.getCountryFacade();
 
         CountryDTO denmark = new CountryDTO("Denmark");
         denmark.addCity(new CityDTO("Koebenhavn"));

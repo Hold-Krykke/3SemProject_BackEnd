@@ -21,7 +21,7 @@ public class CountryFacadeTest {
     }
 
     @BeforeAll
-    public static void setUpClass() {
+    public static void setUpClass() throws Exception {
         facade = CountryFacade.getCountryFacade();
         denmark = new CountryDTO("Denmark");
         denmark.addCity(new CityDTO("Aarhus"));

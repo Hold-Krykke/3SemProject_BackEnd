@@ -80,8 +80,6 @@ public class EventFacade {
             eventdto.setLatitude(embeddedVenues.getAsJsonObject("location").get("latitude").getAsString());
             eventdto.setLongitude(embeddedVenues.getAsJsonObject("location").get("longitude").getAsString());
             events.add(eventdto);
-            
-            System.out.println("********** " + eventdto.toString());
         }
         return events;
     }

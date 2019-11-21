@@ -4,10 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dto.CityDTO;
 import dto.CountryDTO;
+import dto.EventDTO;
 import dto.LocationDateDTO;
 import errorhandling.NotFoundException;
 import facades.CountryFacade;
 import facades.EventFacade;
+import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -70,13 +72,13 @@ public class CountryResource {
      * @param enddate
      * @param country
      * @param city
-     * @return String of events
+     * @return List of EventDTO
      * @throws NotFoundException
      */
     @Path("/events")
     @Produces(MediaType.APPLICATION_JSON)
     @GET
-    public String getEvents(@QueryParam("startdate") String startdate,
+    public List<EventDTO> getEvents(@QueryParam("startdate") String startdate,
             @QueryParam("enddate") String enddate,
             @QueryParam("country") String country,
             @QueryParam("city") String city) throws NotFoundException {

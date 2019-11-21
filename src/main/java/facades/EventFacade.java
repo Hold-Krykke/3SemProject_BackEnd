@@ -16,6 +16,8 @@ import dto.EventDTO;
 import dto.LocationDateDTO;
 import errorhandling.NotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -44,24 +46,40 @@ public class EventFacade {
      * Get data from the ticketmaster API.Calls the private methods
      * uriBuilder(), which builds the uri with the help of calculateRadius() and
      * then the callApi() is called with the uri and the answer from
-     * ticketmaster is returned as a String.
+     * ticketmaster is returned as a List of EventDTO's.
      *
      * @param locDate LocationDateDTO
      * @param city CityDTO
-     * @return String response from ticketmaster API
+     * @return List of EventDTO's created from response from ticketmaster API
      * @throws errorhandling.NotFoundException
      */
-    public String getApiData(LocationDateDTO locDate, CityDTO city) throws NotFoundException {
+    public List<EventDTO> getApiData(LocationDateDTO locDate, CityDTO city) throws NotFoundException {
 
         String uri = uriBuilder(Double.parseDouble(city.getLatitude()), Double.parseDouble(city.getLongitude()),
                 locDate.getStartdate(), locDate.getEnddate(), calculateRadius(city.getPopulation()));
         JsonObject response = callApi(uri);
         
-        JsonObject lol = response.getAsJsonObject("_embedded");
-        JsonArray array = lol.getAsJsonArray("events");
-        // String eventName, String eventDate, String eventAddress, String eventURL
-        EventDTO event = new EventDTO();
-        return "";
+        JsonObject embedded = response.getAsJsonObject("_embedded");
+        JsonArray array = embedded.getAsJsonArray("events");
+        List<EventDTO> events = new ArrayList();
+        for (int i = 0; i < array.size(); i++) {
+            JsonObject event = array.get(i).getAsJsonObject();
+            EventDTO eventdto = new EventDTO();
+            eventdto.setEventName(event.get("name").getAsString());
+            eventdto.setEventURL(event.get("url").getAsString());
+            
+            JsonObject dates = event.get("dates").getAsJsonObject().get("start").getAsJsonObject();
+            eventdto.setEventDate(dates.get("localDate").getAsString());
+            
+            JsonObject embeddedVenues = event.getAsJsonObject("_embedded").getAsJsonArray("venues").get(0).getAsJsonObject();
+            eventdto.setEventAddress(embeddedVenues.getAsJsonObject("address").get("line1").getAsString());
+            eventdto.setLatitude(embeddedVenues.getAsJsonObject("location").get("latitude").getAsString());
+            eventdto.setLongitude(embeddedVenues.getAsJsonObject("location").get("longitude").getAsString());
+            events.add(eventdto);
+            
+            System.out.println("********** " + eventdto.toString());
+        }
+        return events;
     }
 
     /**

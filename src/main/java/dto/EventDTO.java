@@ -10,15 +10,19 @@ public class EventDTO {
     private String eventDate;
     private String eventAddress;
     private String eventURL;
+    private String latitude;
+    private String longitude;
 
     public EventDTO() {
     }
 
-    public EventDTO(String eventName, String eventDate, String eventAddress, String eventURL) {
+    public EventDTO(String eventName, String eventDate, String eventAddress, String eventURL, String latitude, String longitude) {
         this.eventName = eventName;
         this.eventDate = eventDate;
         this.eventAddress = eventAddress;
         this.eventURL = eventURL;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public String getEventName() {
@@ -53,9 +57,26 @@ public class EventDTO {
         this.eventURL = eventURL;
     }
 
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
     @Override
     public String toString() {
-        return "EventDTO{" + "eventName=" + eventName + ", eventDate=" + eventDate + ", eventAddress=" + eventAddress + ", eventURL=" + eventURL + '}';
+        return "EventDTO{" + "eventName=" + eventName + ", eventDate=" + eventDate + ", eventAddress=" + eventAddress + ", eventURL=" + eventURL + ", latitude=" + latitude + ", longitude=" + longitude + '}';
     }
+    
     
 }

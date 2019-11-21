@@ -7,14 +7,11 @@ import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Scanner;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import org.apache.http.client.utils.URIBuilder;
 import com.google.gson.Gson;
-import dto.CountryDTO;
-import java.util.ArrayList;
-import java.util.List;
-// import com.google.gson.Gson;
+import dto.CityDTO;
+import dto.LocationDateDTO;
+
 /**
  *
  * @author Camilla
@@ -36,10 +33,30 @@ public class EventFacade {
     }
     
     
-    public String getApiData(Double latitude, Double longitude, String startdate, String enddate) throws URISyntaxException {
+    public String getApiData(LocationDateDTO locDate, CityDTO city) {
+        
+        String uri = uriBuilder(Double.parseDouble(city.getLatitude()), Double.parseDouble(city.getLongitude()), 
+                        locDate.getStartdate(), locDate.getEnddate(), calculateRadius(city.getPopulation()));
+        callApi(uri);
+        return "";
+    }
+    
+    
+    private String calculateRadius (String population){
+        String radius = "1";
+        int pop = Integer.parseInt(population);
+        if(pop > 100000){
+            int tempRadius = (int) Math.ceil(pop/100000);
+            radius = Integer.toString(tempRadius);
+        }
+        return radius;
+    }
+    
+    private String uriBuilder(Double latitude, Double longitude, String startdate, String enddate, String calcRadius){
+        try {
         String paramGeoHash = "geoPoint";
         String paramRadius = "radius";
-        String paramRadiusVal = "5";
+        String paramRadiusVal = calcRadius;
         String paramUnit = "unit";
         String paramStart = "startDateTime";
         String paramEnd = "endDateTime";
@@ -55,9 +72,15 @@ public class EventFacade {
         uribuilder.addParameter(paramStart, startdate);
         uribuilder.addParameter(paramEnd, enddate);
         uribuilder.addParameter(key, apiKey);
+        return uribuilder.toString();
         
-        String uri = uribuilder.toString();
-        System.out.println("URL: " + uri);
+        } catch (URISyntaxException e) {
+            System.out.println(e.getMessage());
+            return "";
+        }
+    }
+    
+    private String callApi(String uri) {
         try {
             URL siteURL = new URL(uri);
             HttpURLConnection connection = (HttpURLConnection) siteURL.openConnection();

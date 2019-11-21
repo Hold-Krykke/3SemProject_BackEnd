@@ -2,21 +2,27 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dto.CityDTO;
 import dto.CountryDTO;
+import dto.LocationDateDTO;
 import errorhandling.NotFoundException;
 import facades.CountryFacade;
+import facades.EventFacade;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 @Path("resource")
 public class CountryResource {
 
     private static final CountryFacade FACADE = CountryFacade.getCountryFacade();
+    private static final EventFacade EVENTFACADE = EventFacade.getEventFacade();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     @GET
@@ -59,4 +65,19 @@ public class CountryResource {
         return "{\"Countryname\":\"" + FACADE.getCountryNameByAlpha2(alpha2) + "\"}";
     }
 
+    
+    @Path("/events")
+    @Produces(MediaType.APPLICATION_JSON)
+    @GET
+    public String getEvents(LocationDateDTO locationdate)  throws NotFoundException {
+        // needs to be changed to be a specific city by name
+        CityDTO city = FACADE.getCountry(locationdate.getCountry()).getCities().get(0);
+        return EVENTFACADE.getApiData(locationdate, city);
+
+    }
 }
+
+//@QueryParam("startdate") String startdate,
+//@QueryParam("enddate") String enddate,
+//@QueryParam("country") String country,
+//@QueryParam("city") String city, 

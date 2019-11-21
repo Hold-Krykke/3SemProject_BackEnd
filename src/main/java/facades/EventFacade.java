@@ -142,6 +142,7 @@ public class EventFacade {
             uribuilder.addParameter(paramStart, startdate);
             uribuilder.addParameter(paramEnd, enddate);
             uribuilder.addParameter(key, apiKey);
+            System.out.println("*********** URL " + uribuilder);
             return uribuilder.toString();
 
         } catch (URISyntaxException e) {

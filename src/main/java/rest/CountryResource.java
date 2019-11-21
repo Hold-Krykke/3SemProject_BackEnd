@@ -6,8 +6,6 @@ import dto.CityDTO;
 import dto.CountryDTO;
 import dto.EventDTO;
 import dto.LocationDateDTO;
-import errorhandling.NotFoundException;
-import facades.CountryFacade;
 import facades.EventFacade;
 import java.util.List;
 import errorhandling.APIUtilException;
@@ -23,11 +21,8 @@ import javax.ws.rs.core.MediaType;
 @Path("resource")
 public class CountryResource {
 
-
     private static final EventFacade EVENTFACADE = EventFacade.getEventFacade();
-
     private static CountryFacade FACADE;
-
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     public CountryResource() throws APIUtilException {
@@ -97,12 +92,12 @@ public class CountryResource {
 //        System.out.println("city " + FACADE.getCountry(locationdate.getCountry()).getCities().get(0));
 //        CityDTO citydto = FACADE.getCountry(locationdate.getCountry()).getCities().get(0);
             LocationDateDTO locationdate = new LocationDateDTO(startdate, enddate, country, city);
-            System.out.println("locationdto " + locationdate.toString());
+            //System.out.println("locationdto " + locationdate.toString());
             // 52.51739502, 13.39782715
-            CityDTO cityHardcode = new CityDTO("Berlin", "2350452","52.51739502", "13.39782715");
-            //CityDTO citydto = FACADE.getCountry(country).getCities().get(0); // getSpecificCity(city)
+            //CityDTO cityHardcode = new CityDTO("Berlin", "2350452","52.51739502", "13.39782715");
+            CityDTO citydto = FACADE.getCountry(country).getSpecificCityByName(city); // getSpecificCity(city)
                                                     // citydto
-        return EVENTFACADE.getApiData(locationdate, cityHardcode);
+        return EVENTFACADE.getApiData(locationdate, citydto);
 
     }
 }

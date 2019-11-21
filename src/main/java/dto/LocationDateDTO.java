@@ -10,11 +10,22 @@ public class LocationDateDTO {
     String enddate;
     String country;
     String city;
+    String endtime = "T23:59:59Z";
+    String starttime = "T00:00:00Z";
     
-
+    /**
+     * Empty constructor
+     */
     public LocationDateDTO() {
     }
 
+    /**
+     * Constructor
+     * @param startdate
+     * @param enddate
+     * @param country
+     * @param city
+     */
     public LocationDateDTO(String startdate, String enddate, String country, String city) {
         this.startdate = startdate;
         this.enddate = enddate;
@@ -22,34 +33,66 @@ public class LocationDateDTO {
         this.city = city;
     }
 
+    /**
+     * Get startdate in format "2019-11-23T00:00:00Z"
+     * @return
+     */
     public String getStartdate() {
         return startdate;
     }
 
+    /**
+     * Set startdate in format "2019-11-23"
+     * @param startdate
+     */
     public void setStartdate(String startdate) {
-        this.startdate = startdate;
+        this.startdate = startdate + starttime;
     }
 
+    /**
+     * Get enddate in format "2019-11-23T00:00:00Z"
+     * @return
+     */
     public String getEnddate() {
         return enddate;
     }
 
+    /**
+     * Set enddate in format "2019-11-23"
+     * @param enddate
+     */
     public void setEnddate(String enddate) {
-        this.enddate = enddate;
+        this.enddate = enddate + endtime;
     }
 
+    /**
+     * Get Country
+     * @return
+     */
     public String getCountry() {
         return country;
     }
 
+    /**
+     * Set Country
+     * @param country
+     */
     public void setCountry(String country) {
         this.country = country;
     }
 
+    /**
+     * Get city
+     * @return
+     */
     public String getCity() {
         return city;
     }
 
+    /**
+     * Set city
+     * @param city
+     */
     public void setCity(String city) {
         this.city = city;
     }

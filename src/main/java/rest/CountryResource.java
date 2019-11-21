@@ -8,14 +8,10 @@ import dto.LocationDateDTO;
 import errorhandling.NotFoundException;
 import facades.CountryFacade;
 import facades.EventFacade;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 @Path("resource")
@@ -65,7 +61,12 @@ public class CountryResource {
         return "{\"Countryname\":\"" + FACADE.getCountryNameByAlpha2(alpha2) + "\"}";
     }
 
-    
+    /**
+     * Used to get the events of a given location and date
+     * @param locationdate LocationDateDTO
+     * @return String of events
+     * @throws NotFoundException
+     */
     @Path("/events")
     @Produces(MediaType.APPLICATION_JSON)
     @GET
@@ -77,7 +78,3 @@ public class CountryResource {
     }
 }
 
-//@QueryParam("startdate") String startdate,
-//@QueryParam("enddate") String enddate,
-//@QueryParam("country") String country,
-//@QueryParam("city") String city, 

@@ -7,6 +7,7 @@ import javax.ws.rs.WebApplicationException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,30 @@ public class CountryFacadeTest {
     @AfterEach
     public void tearDownTest() {
 
+    }
+
+    /**
+     * This is a combined test for getEuropeanCountriesAndCities()
+     *
+     * Since, at facade start we populate it's list of countries, we want to
+     * check that it is populated - and somewhat correctly.
+     */
+    @Test
+    public void testFacadeCountries() throws NotFoundException {
+        //Arrange
+        CountryDTO expResult = new CountryDTO("Sweden", "se");
+        CityDTO expResultCity = new CityDTO("Stockholm", "1515017", "59.33258", "18.0649"); //lets hope these values don't change
+        expResult.getCities().add(expResultCity);
+
+        //Act
+        CountryDTO result = facade.getCountry("Sweden");
+        CityDTO resultCity = result.getSpecificCityByName("Stockholm");
+
+        //Assert
+        assertTrue(facade.getCountries().size() > 0);
+        assertEquals(expResult.getCountryName(), result.getCountryName());
+        assertEquals(expResult.getCountryCode(), result.getCountryCode());
+        assertEquals(expResultCity, resultCity);
     }
 
     @Test

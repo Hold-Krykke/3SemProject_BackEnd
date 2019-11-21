@@ -29,6 +29,9 @@ public class CountryResourceTest {
     private static HttpServer httpServer;
     private static EntityManagerFactory emf;
     private static CountryFacade facade = CountryFacade.getCountryFacade();
+    
+    // Change this, if you change URL for country resource endpoint. 
+    private final String url = "/resource";
 
     static HttpServer startServer() {
         ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
@@ -71,7 +74,7 @@ public class CountryResourceTest {
     public void testDummyMsg() throws Exception {
         given()
                 .contentType("application/json")
-                .get("/resource/").then()
+                .get(url).then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
                 .body("msg", equalTo("Hello World"));
@@ -81,7 +84,7 @@ public class CountryResourceTest {
     public void testFacadeMessage() throws Exception {
         given()
                 .contentType("application/json")
-                .get("/resource/facade").then()
+                .get(url+"/facade").then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
                 .body("facadeMessage", equalTo("Hello from the facade"));
@@ -91,7 +94,7 @@ public class CountryResourceTest {
     public void testWrongGetCountry() throws Exception {
         given()
                 .contentType("application/json")
-                .get("/resource/WRONG").then()
+                .get(url+"/WRONG").then()
                 .assertThat()
                 .statusCode(400)
                 .body("message", equalTo("No country by that name exists."));
@@ -101,7 +104,7 @@ public class CountryResourceTest {
     public void testGetCountry() throws Exception {
         given()
                 .contentType("application/json")
-                .get("/resource/Denmark").then()
+                .get(url+"/Denmark").then()
                 .assertThat()
                 .statusCode(200)
                 .body("cities[0].cityName", equalTo("Koebenhavn"))
@@ -115,7 +118,7 @@ public class CountryResourceTest {
     public void testCountryName() throws Exception {
         given()
                 .contentType("application/json")
-                .get("/resource/countryname/DK").then()
+                .get(url+"/countryname/DK").then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
                 .body("Countryname", equalTo("Denmark"));
@@ -125,7 +128,7 @@ public class CountryResourceTest {
     public void testCountryNameWrong() throws Exception {
         given()
                 .contentType("application/json")
-                .get("/resource/countryname/WRONG").then()
+                .get(url+"/countryname/WRONG").then()
                 .assertThat()
                 .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode())
                 .body("message", equalTo("No country with given alpha2 code found"));

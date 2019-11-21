@@ -60,7 +60,11 @@ public class EventFacade {
         JsonObject response = callApi(uri);
         
         JsonObject embedded = response.getAsJsonObject("_embedded");
+        if (embedded == null){
+            throw new NotFoundException("No events for this City exists");
+        }
         JsonArray array = embedded.getAsJsonArray("events");
+        
         List<EventDTO> events = new ArrayList();
         for (int i = 0; i < array.size(); i++) {
             JsonObject event = array.get(i).getAsJsonObject();

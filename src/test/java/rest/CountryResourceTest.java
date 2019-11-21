@@ -15,6 +15,7 @@ import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import static org.hamcrest.Matchers.equalTo;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,6 +60,10 @@ public class CountryResourceTest {
 
     @BeforeEach
     public void setUp() {
+    }
+
+    @AfterEach
+    public void tearDown() throws Exception {
     }
 
     @Test
@@ -129,5 +134,20 @@ public class CountryResourceTest {
                 .assertThat()
                 .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode())
                 .body("message", equalTo("No country with given alpha2 code found"));
+    }
+
+    
+    /**
+     * Test of getEvents method, of class CountryResource.
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testGetEvents() throws Exception {
+//        given()
+//                .contentType("application/json")
+//                .get("/resource/events").then()
+//                .assertThat()
+//                .statusCode(HttpStatus.OK_200.getStatusCode())
+//                .body("events", equalTo(""));
     }
 }

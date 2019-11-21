@@ -8,8 +8,11 @@ import java.net.URL;
 import java.util.Scanner;
 import org.apache.http.client.utils.URIBuilder;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
 import dto.CityDTO;
+import dto.EventDTO;
 import dto.LocationDateDTO;
 import errorhandling.NotFoundException;
 import java.io.IOException;
@@ -52,7 +55,13 @@ public class EventFacade {
 
         String uri = uriBuilder(Double.parseDouble(city.getLatitude()), Double.parseDouble(city.getLongitude()),
                 locDate.getStartdate(), locDate.getEnddate(), calculateRadius(city.getPopulation()));
-        return callApi(uri);
+        JsonObject response = callApi(uri);
+        
+        JsonObject lol = response.getAsJsonObject("_embedded");
+        JsonArray array = lol.getAsJsonArray("events");
+        // String eventName, String eventDate, String eventAddress, String eventURL
+        EventDTO event = new EventDTO();
+        return "";
     }
 
     /**
@@ -128,7 +137,7 @@ public class EventFacade {
      * @return String representation of the response
      * @throws errorhandling.NotFoundException
      */
-    private String callApi(String uri) throws NotFoundException {
+    private JsonObject callApi(String uri) throws NotFoundException {
         try {
             URL siteURL = new URL(uri);
             HttpURLConnection connection = (HttpURLConnection) siteURL.openConnection();
@@ -141,7 +150,7 @@ public class EventFacade {
                 while (scan.hasNext()) {
                     response += scan.nextLine();
                 }
-                return GSON.fromJson(response, JsonObject.class).toString();
+                return GSON.fromJson(response, JsonObject.class);
             }
         } catch (JsonSyntaxException | IOException e) {
             throw new NotFoundException(e.getMessage());

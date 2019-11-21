@@ -66,7 +66,10 @@ public class CountryResource {
     /**
      * Used to get the events of a given location and date
      *
-     * @param locationdate LocationDateDTO
+     * @param startdate
+     * @param enddate
+     * @param country
+     * @param city
      * @return String of events
      * @throws NotFoundException
      */
@@ -92,8 +95,3 @@ public class CountryResource {
     }
 }
 
-//@QueryParam("startdate") String startdate,
-//@QueryParam("enddate") String enddate,
-//@QueryParam("country") String country,
-//@QueryParam("city") String city,
-//LocationDateDTO locationdate

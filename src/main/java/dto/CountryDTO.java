@@ -59,6 +59,21 @@ public class CountryDTO {
     public CountryDTO() {
     }
 
+    /**
+     * Gets a specific city from the countries list of cities
+     *
+     * @param name name of specific city.
+     * @return
+     */
+    public CityDTO getSpecificCityByName(String name) {
+        for (CityDTO city : this.cities) {
+            if (city.getCityName().equals(name)) {
+                return city;
+            }
+        }
+        return null;
+    }
+
     public List<CityDTO> getCities() {
         return cities;
     }
@@ -102,12 +117,15 @@ public class CountryDTO {
         if (!Objects.equals(this.countryName, other.countryName)) {
             return false;
         }
+        if (!Objects.equals(this.countryCode, other.countryCode)) {
+            return false;
+        }
         if (!Objects.equals(this.cities, other.cities)) {
             return false;
         }
         return true;
     }
-
+  
     @Override
     public String toString() {
         return "CountryDTO{" + "countryName=" + countryName + ", countryCode=" + countryCode + ", cities=" + cities + '}';

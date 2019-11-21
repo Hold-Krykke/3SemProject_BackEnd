@@ -27,8 +27,8 @@ public class LocationDateDTO {
      * @param city
      */
     public LocationDateDTO(String startdate, String enddate, String country, String city) {
-        this.startdate = startdate;
-        this.enddate = enddate;
+        this.startdate = startdate + starttime;
+        this.enddate = enddate + endtime;
         this.country = country;
         this.city = city;
     }
@@ -95,6 +95,11 @@ public class LocationDateDTO {
      */
     public void setCity(String city) {
         this.city = city;
+    }
+
+    @Override
+    public String toString() {
+        return "LocationDateDTO{" + "startdate=" + startdate + ", enddate=" + enddate + ", country=" + country + ", city=" + city + ", endtime=" + endtime + ", starttime=" + starttime + '}';
     }
     
     

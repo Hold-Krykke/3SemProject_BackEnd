@@ -103,7 +103,7 @@ public class EventFacade {
             String paramEnd = "endDateTime";
             String key = "apikey";
             String apiKey = "PXLz8SSxwRDS9HUxwZ9LVAkQELNMbma8";
-
+            
             String paramGeohashVal = GeoHash.geoHashStringWithCharacterPrecision(latitude, longitude, 9);
 
             URIBuilder uribuilder = new URIBuilder(baseURL);

@@ -12,6 +12,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 @Path("resource")
@@ -48,9 +49,10 @@ public class CountryResource {
         return FACADE.getCountry(country);
 
     }
-    
+
     /**
      * Used to get the name of a country given its alpha2 code.
+     *
      * @param alpha2
      * @return Name of country
      */
@@ -63,6 +65,7 @@ public class CountryResource {
 
     /**
      * Used to get the events of a given location and date
+     *
      * @param locationdate LocationDateDTO
      * @return String of events
      * @throws NotFoundException
@@ -70,11 +73,27 @@ public class CountryResource {
     @Path("/events")
     @Produces(MediaType.APPLICATION_JSON)
     @GET
-    public String getEvents(LocationDateDTO locationdate)  throws NotFoundException {
+    public String getEvents(@QueryParam("startdate") String startdate,
+            @QueryParam("enddate") String enddate,
+            @QueryParam("country") String country,
+            @QueryParam("city") String city) throws NotFoundException {
         // needs to be changed to be a specific city by name
-        CityDTO city = FACADE.getCountry(locationdate.getCountry()).getCities().get(0);
-        return EVENTFACADE.getApiData(locationdate, city);
+//        System.out.println("country " + FACADE.getCountry(locationdate.getCountry()));
+//        System.out.println("city " + FACADE.getCountry(locationdate.getCountry()).getCities().get(0));
+//        CityDTO citydto = FACADE.getCountry(locationdate.getCountry()).getCities().get(0);
+            LocationDateDTO locationdate = new LocationDateDTO(startdate, enddate, country, city);
+            System.out.println("locationdto " + locationdate.toString());
+            // 52.51739502, 13.39782715
+            CityDTO cityHardcode = new CityDTO("Berlin", "2350452","52.51739502", "13.39782715");
+            //CityDTO citydto = FACADE.getCountry(country).getCities().get(0); // getSpecificCity(city)
+                                                    // citydto
+        return EVENTFACADE.getApiData(locationdate, cityHardcode);
 
     }
 }
 
+//@QueryParam("startdate") String startdate,
+//@QueryParam("enddate") String enddate,
+//@QueryParam("country") String country,
+//@QueryParam("city") String city,
+//LocationDateDTO locationdate

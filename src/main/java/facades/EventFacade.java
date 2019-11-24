@@ -56,7 +56,7 @@ public class EventFacade {
         String uri = uriBuilder(Double.parseDouble(city.getLatitude()), Double.parseDouble(city.getLongitude()),
                 locDate.getStartdate(), locDate.getEnddate(), calculateRadius(city.getPopulation()));
         JsonObject response = callApi(uri);
-        System.out.println("city ** pop " + city.getPopulation() + " lat " + city.getLatitude() + " long " + city.getLongitude());
+
         JsonObject validResponse = response.getAsJsonObject("page");
         if (validResponse == null){
             throw new NotFoundException("Inputdata is not valid");

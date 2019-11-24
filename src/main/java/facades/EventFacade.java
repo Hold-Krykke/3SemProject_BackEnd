@@ -9,7 +9,6 @@ import java.util.Scanner;
 import org.apache.http.client.utils.URIBuilder;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
 import dto.CityDTO;
 import dto.EventDTO;
@@ -54,17 +53,19 @@ public class EventFacade {
      * @throws errorhandling.NotFoundException
      */
     public List<EventDTO> getApiData(LocationDateDTO locDate, CityDTO city) throws NotFoundException {
-
         String uri = uriBuilder(Double.parseDouble(city.getLatitude()), Double.parseDouble(city.getLongitude()),
                 locDate.getStartdate(), locDate.getEnddate(), calculateRadius(city.getPopulation()));
         JsonObject response = callApi(uri);
-        
+        System.out.println("city ** pop " + city.getPopulation() + " lat " + city.getLatitude() + " long " + city.getLongitude());
+        JsonObject validResponse = response.getAsJsonObject("page");
+        if (validResponse == null){
+            throw new NotFoundException("Inputdata is not valid");
+        }
         JsonObject embedded = response.getAsJsonObject("_embedded");
         if (embedded == null){
             throw new NotFoundException("No events for this City exists");
         }
         JsonArray array = embedded.getAsJsonArray("events");
-        
         List<EventDTO> events = new ArrayList();
         for (int i = 0; i < array.size(); i++) {
             JsonObject event = array.get(i).getAsJsonObject();
@@ -142,7 +143,6 @@ public class EventFacade {
             uribuilder.addParameter(paramStart, startdate);
             uribuilder.addParameter(paramEnd, enddate);
             uribuilder.addParameter(key, apiKey);
-            System.out.println("*********** URL " + uribuilder);
             return uribuilder.toString();
 
         } catch (URISyntaxException e) {

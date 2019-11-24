@@ -87,16 +87,8 @@ public class CountryResource {
             @QueryParam("enddate") String enddate,
             @QueryParam("country") String country,
             @QueryParam("city") String city) throws NotFoundException {
-        // needs to be changed to be a specific city by name
-//        System.out.println("country " + FACADE.getCountry(locationdate.getCountry()));
-//        System.out.println("city " + FACADE.getCountry(locationdate.getCountry()).getCities().get(0));
-//        CityDTO citydto = FACADE.getCountry(locationdate.getCountry()).getCities().get(0);
             LocationDateDTO locationdate = new LocationDateDTO(startdate, enddate, country, city);
-            //System.out.println("locationdto " + locationdate.toString());
-            // 52.51739502, 13.39782715
-            //CityDTO cityHardcode = new CityDTO("Berlin", "2350452","52.51739502", "13.39782715");
-            CityDTO citydto = FACADE.getCountry(country).getSpecificCityByName(city); // getSpecificCity(city)
-                                                    // citydto
+            CityDTO citydto = FACADE.getCountry(country).getSpecificCityByName(city); 
         return EVENTFACADE.getApiData(locationdate, citydto);
 
     }

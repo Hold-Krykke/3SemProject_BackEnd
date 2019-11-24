@@ -43,18 +43,6 @@ public class EventFacadeTest {
         citydto_NoEvents = new CityDTO("Odense", "145931", "55.39594", "10.38831");
     }
 
-    @AfterAll
-    public static void tearDownClass() {
-    }
-
-    @BeforeEach
-    public void setUp() {
-    }
-
-    @AfterEach
-    public void tearDown() {
-    }
-
     /**
      * Test of getApiData method, of class EventFacade.
      */

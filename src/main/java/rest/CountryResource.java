@@ -71,7 +71,9 @@ public class CountryResource {
     }
 
     /**
-     * Used to get the events of a given location and date
+     * Used to get the events of a given location and date. Instantiates LocationDateDTO
+     * and CityDTO from from the data given in the query parameters and  the CountryFacade
+     * and then uses the DTO's as paramteters for the getApiData().
      *
      * @param startdate
      * @param enddate

@@ -65,9 +65,12 @@ public class EventFacade {
         if (embedded == null){
             throw new NotFoundException("No events for this City exists");
         }
+        
         JsonArray array = embedded.getAsJsonArray("events");
         List<EventDTO> events = new ArrayList();
+        
         for (int i = 0; i < array.size(); i++) {
+            
             JsonObject event = array.get(i).getAsJsonObject();
             EventDTO eventdto = new EventDTO();
             eventdto.setEventName(event.get("name").getAsString());

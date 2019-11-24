@@ -168,6 +168,11 @@ public class CountryResourceTest {
                 .body("[0].longitude", notNullValue());
     }
     
+    /**
+     * FAIL Test of getEvents method, of class CountryResource.
+     *
+     * @throws java.lang.Exception
+     */
     @Test
     public void testGetEvents_WrongData_FAIL() throws Exception {
         given()
@@ -179,6 +184,11 @@ public class CountryResourceTest {
                 .body("message", equalTo("No country by that name exists."));
     }
     
+    /**
+     * FAILTest of getEvents method, of class CountryResource.
+     *
+     * @throws java.lang.Exception
+     */
     @Test
     public void testGetEvents_NoEvents_FAIL() throws Exception {
         given()

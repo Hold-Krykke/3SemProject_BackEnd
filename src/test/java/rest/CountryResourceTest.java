@@ -158,7 +158,7 @@ public class CountryResourceTest {
                 .contentType("application/json")
                 .accept("application/json")
                 .get("/resource/events" + payload).then()
-                .assertThat()
+                .assertThat().log().body()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
                 .body("[0].eventAddress", notNullValue())
                 .body("[0].eventDate", notNullValue())

@@ -1,5 +1,6 @@
 package dto;
 
+import errorhandling.NotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -64,14 +65,16 @@ public class CountryDTO {
      *
      * @param name name of specific city.
      * @return
+     * @throws errorhandling.NotFoundException If city is not in this country's
+     * list
      */
-    public CityDTO getSpecificCityByName(String name) {
+    public CityDTO getSpecificCityByName(String name) throws NotFoundException {
         for (CityDTO city : this.cities) {
             if (city.getCityName().equals(name)) {
                 return city;
             }
         }
-        return null;
+        throw new NotFoundException("No city with that name");
     }
 
     public List<CityDTO> getCities() {
@@ -125,7 +128,7 @@ public class CountryDTO {
         }
         return true;
     }
-  
+
     @Override
     public String toString() {
         return "CountryDTO{" + "countryName=" + countryName + ", countryCode=" + countryCode + ", cities=" + cities + '}';

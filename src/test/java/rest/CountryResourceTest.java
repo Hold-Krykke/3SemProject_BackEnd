@@ -154,6 +154,7 @@ public class CountryResourceTest {
      */
     @Test
     public void testGetEvents() throws Exception {
+        Thread.sleep(1000);
         given()
                 .contentType("application/json")
                 .accept("application/json")
@@ -167,7 +168,7 @@ public class CountryResourceTest {
                 .body("[0].latitude", notNullValue())
                 .body("[0].longitude", notNullValue());
     }
-    
+
     /**
      * FAIL Test of getEvents method, of class CountryResource.
      *
@@ -175,6 +176,7 @@ public class CountryResourceTest {
      */
     @Test
     public void testGetEvents_WrongData_FAIL() throws Exception {
+        Thread.sleep(1000);
         given()
                 .contentType("application/json")
                 .accept("application/json")
@@ -183,7 +185,7 @@ public class CountryResourceTest {
                 .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode())
                 .body("message", equalTo("No country by that name exists."));
     }
-    
+
     /**
      * FAILTest of getEvents method, of class CountryResource.
      *
@@ -191,6 +193,7 @@ public class CountryResourceTest {
      */
     @Test
     public void testGetEvents_NoEvents_FAIL() throws Exception {
+        Thread.sleep(1000);
         given()
                 .contentType("application/json")
                 .accept("application/json")

@@ -2,7 +2,6 @@ package rest;
 
 import dto.CityDTO;
 import dto.CountryDTO;
-import errorhandling.APIUtilException;
 import facades.CountryFacade;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
@@ -17,6 +16,7 @@ import org.glassfish.grizzly.http.util.HttpStatus;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,6 +33,9 @@ public class CountryResourceTest {
     private static EntityManagerFactory emf;
     private static CountryFacade facade;
     private static List<String> denmarkCities = new ArrayList<>();
+    private static String payload;
+    private static String payload_WrongData;
+    private static String payload_NoEvents;
 
     // Change this, if you change URL for country resource endpoint. 
     private final String url = "/resource";
@@ -50,7 +53,7 @@ public class CountryResourceTest {
         RestAssured.port = SERVER_PORT;
         RestAssured.defaultParser = Parser.JSON;
         facade = CountryFacade.getCountryFacade();
-        
+
         denmarkCities.add("Koebenhavn");
         denmarkCities.add("Aalborg");
         denmarkCities.add("Aarhus");
@@ -62,6 +65,10 @@ public class CountryResourceTest {
             denmark.addCity(new CityDTO(city));
         });
         facade.addCountry(denmark);
+
+        payload = "?startdate=2019-12-24&enddate=2020-12-24&country=Norway&city=Oslo";
+        payload_WrongData = "?startdate=2019-12-24&enddate=2020-12-24&country=Wrong&city=Oslo";
+        payload_NoEvents = "?startdate=2019-12-24&enddate=2019-12-24&country=Norway&city=Stavanger";
     }
 
     @AfterAll
@@ -88,6 +95,7 @@ public class CountryResourceTest {
                 .assertThat()
                 .statusCode(code)
                 .body(key, equalTo(value));
+
     }
 
     @Test
@@ -125,7 +133,7 @@ public class CountryResourceTest {
 //                .body("cities[4].cityName", equalTo("Roskilde"));
         // Not actually sure if this is better or worse. 
         for (int i = 0; i < denmarkCities.size(); i++) {
-            bodyTest("/Denmark", 200, "cities["+i+"].cityName", denmarkCities.get(i));
+            bodyTest("/Denmark", 200, "cities[" + i + "].cityName", denmarkCities.get(i));
         }
     }
 
@@ -137,5 +145,58 @@ public class CountryResourceTest {
     @Test
     public void testCountryNameWrong() throws Exception {
         bodyTest("/countryname/WRONG", 400, "message", "No country with given alpha2 code found");
+    }
+
+    /**
+     * Test of getEvents method, of class CountryResource.
+     *
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testGetEvents() throws Exception {
+        given()
+                .contentType("application/json")
+                .accept("application/json")
+                .get("/resource/events" + payload).then()
+                .assertThat().log().body()
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+                .body("[0].eventAddress", notNullValue())
+                .body("[0].eventDate", notNullValue())
+                .body("[0].eventName", notNullValue())
+                .body("[0].eventURL", notNullValue())
+                .body("[0].latitude", notNullValue())
+                .body("[0].longitude", notNullValue());
+    }
+    
+    /**
+     * FAIL Test of getEvents method, of class CountryResource.
+     *
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testGetEvents_WrongData_FAIL() throws Exception {
+        given()
+                .contentType("application/json")
+                .accept("application/json")
+                .get("/resource/events" + payload_WrongData).then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode())
+                .body("message", equalTo("No country by that name exists."));
+    }
+    
+    /**
+     * FAILTest of getEvents method, of class CountryResource.
+     *
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testGetEvents_NoEvents_FAIL() throws Exception {
+        given()
+                .contentType("application/json")
+                .accept("application/json")
+                .get("/resource/events" + payload_NoEvents).then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode())
+                .body("message", equalTo("No events for this City exists"));
     }
 }

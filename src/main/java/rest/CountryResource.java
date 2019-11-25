@@ -2,7 +2,12 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dto.CityDTO;
 import dto.CountryDTO;
+import dto.EventDTO;
+import dto.LocationDateDTO;
+import facades.EventFacade;
+import java.util.List;
 import errorhandling.APIUtilException;
 import errorhandling.NotFoundException;
 import facades.CountryFacade;
@@ -10,11 +15,13 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 @Path("resource")
 public class CountryResource {
 
+    private static final EventFacade EVENTFACADE = EventFacade.getEventFacade();
     private static CountryFacade FACADE;
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
@@ -63,4 +70,29 @@ public class CountryResource {
         return "{\"Countryname\":\"" + FACADE.getCountryNameByAlpha2(alpha2) + "\"}";
     }
 
+    /**
+     * Used to get the events of a given location and date. Instantiates LocationDateDTO
+     * and CityDTO from from the data given in the query parameters and  the CountryFacade
+     * and then uses the DTO's as paramteters for the getApiData().
+     *
+     * @param startdate
+     * @param enddate
+     * @param country
+     * @param city
+     * @return List of EventDTO
+     * @throws NotFoundException
+     */
+    @Path("/events")
+    @Produces(MediaType.APPLICATION_JSON)
+    @GET
+    public List<EventDTO> getEvents(@QueryParam("startdate") String startdate,
+            @QueryParam("enddate") String enddate,
+            @QueryParam("country") String country,
+            @QueryParam("city") String city) throws NotFoundException {
+            LocationDateDTO locationdate = new LocationDateDTO(startdate, enddate, country, city);
+            CityDTO citydto = FACADE.getCountry(country).getSpecificCityByName(city); 
+        return EVENTFACADE.getApiData(locationdate, citydto);
+
+    }
 }
+

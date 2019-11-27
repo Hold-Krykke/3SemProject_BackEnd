@@ -12,8 +12,12 @@ import errorhandling.APIUtilException;
 import errorhandling.NotFoundException;
 import facades.CountryFacade;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.ws.rs.GET;
@@ -98,9 +102,10 @@ public class CountryResource {
     }
 
     /**
-     * Used to get the events of a given location and date. Instantiates LocationDateDTO
-     * and CityDTO from from the data given in the query parameters and  the CountryFacade
-     * and then uses the DTO's as paramteters for the getApiData().
+     * Used to get the events of a given location and date. Instantiates
+     * LocationDateDTO and CityDTO from from the data given in the query
+     * parameters and the CountryFacade and then uses the DTO's as paramteters
+     * for the getApiData().
      *
      * @param startdate
      * @param enddate
@@ -112,14 +117,19 @@ public class CountryResource {
     @Path("/events")
     @Produces(MediaType.APPLICATION_JSON)
     @GET
+    @Operation(summary = "Get all events in a given city, on given date/dates.",
+            tags = {"General"},
+            responses = {
+                @ApiResponse(
+                        content = @Content(mediaType = "application/json", schema = @Schema(implementation = EventDTO.class))),
+                @ApiResponse(responseCode = "200", description = "The Requested list of events"),
+                @ApiResponse(responseCode = "400", description = "TODO - [INSERT RIGHT ERROR MESSAGE]")})
     public List<EventDTO> getEvents(@QueryParam("startdate") String startdate,
             @QueryParam("enddate") String enddate,
             @QueryParam("country") String country,
             @QueryParam("city") String city) throws NotFoundException {
-            LocationDateDTO locationdate = new LocationDateDTO(startdate, enddate, country, city);
-            CityDTO citydto = FACADE.getCountry(country).getSpecificCityByName(city); 
+        LocationDateDTO locationdate = new LocationDateDTO(startdate, enddate, country, city);
+        CityDTO citydto = FACADE.getCountry(country).getSpecificCityByName(city);
         return EVENTFACADE.getApiData(locationdate, citydto);
-
     }
 }
-

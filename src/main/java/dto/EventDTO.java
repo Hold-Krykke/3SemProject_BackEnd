@@ -1,16 +1,25 @@
-
 package dto;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  *
  * @author Camilla
  */
+@Schema(name = "Event")
 public class EventDTO {
-    private String eventName; 
+
+    @Schema(example = "\"eventName\":\"The Star Wars Music\"")
+    private String eventName;
+    @Schema(example = "\"eventDate\":\"2019-11-27\"")
     private String eventDate;
+    @Schema(example = "\"eventAddress\":\"Oslo Konserthus, Munkedamsveien 14\"")
     private String eventAddress;
+    @Schema(example = "\"eventURL\":\"https://www.ticketmaster.no/event/the-star-wars-music-tickets/603869?language=en-us\"")
     private String eventURL;
+    @Schema(example = "\"latitude\":\"59.91324\"")
     private String latitude;
+    @Schema(example = "\"longitude\":\"10.72963\"")
     private String longitude;
 
     public EventDTO() {
@@ -77,6 +86,5 @@ public class EventDTO {
     public String toString() {
         return "EventDTO{" + "eventName=" + eventName + ", eventDate=" + eventDate + ", eventAddress=" + eventAddress + ", eventURL=" + eventURL + ", latitude=" + latitude + ", longitude=" + longitude + '}';
     }
-    
-    
+
 }

@@ -118,7 +118,7 @@ public class CountryResource {
     @Produces(MediaType.APPLICATION_JSON)
     @GET
     @Operation(summary = "Get all events in a given city, on given date/dates.",
-            tags = {"General"},
+            tags = {"Events"},
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json", schema = @Schema(implementation = EventDTO.class))),

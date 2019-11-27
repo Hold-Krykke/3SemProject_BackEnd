@@ -11,6 +11,11 @@ import java.util.List;
 import errorhandling.APIUtilException;
 import errorhandling.NotFoundException;
 import facades.CountryFacade;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -18,6 +23,28 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+@OpenAPIDefinition(
+        info = @Info(
+                title = "Hold Krykke Semesterprojekt API",
+                version = "1.0",
+                description = "API related to Cphbusiness 3rd semester CS project.",
+                contact = @Contact(name = "Github Contributors", url = "https://github.com/Hold-Krykke/3SemProject_BackEnd#contributors")
+        ),
+        tags = {
+            @Tag(name = "Events", description = "API endpoint for Events")
+        },
+        servers = {
+            @Server(
+                    description = "For Local host testing",
+                    url = "http://localhost:8080/3SEMPROJECT/api/resource/events?"
+            ),
+            @Server(
+                    description = "Server API",
+                    url = "https://runivn.dk/3SEMPROJECT/api/resource/events?"
+            )
+
+        }
+)
 @Path("resource")
 public class CountryResource {
 

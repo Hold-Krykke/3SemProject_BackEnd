@@ -9,17 +9,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Schema(name = "Event", description = "Returns the field or 'N/A' if field is not available.")
 public class EventDTO {
 
-    @Schema(example = "\"eventName\":\"The Star Wars Music\"")
+    @Schema(example = "The Star Wars Music", defaultValue = "\"N/A\"") //{\"eventName\":\"The Star Wars Music\"}
     private String eventName;
-    @Schema(example = "\"eventDate\":\"2019-11-27\"")
+    @Schema(example = "2019-11-27", defaultValue = "\"N/A\"") //{\"eventDate\":\"2019-11-27\"}
     private String eventDate;
-    @Schema(example = "\"eventAddress\":\"Oslo Konserthus, Munkedamsveien 14\"")
+    @Schema(example = "Oslo Konserthus, Munkedamsveien 14", defaultValue = "\"N/A\"") //{\"eventAddress\":\"Oslo Konserthus, Munkedamsveien 14}\"
     private String eventAddress;
-    @Schema(example = "\"eventURL\":\"https://www.ticketmaster.no/event/the-star-wars-music-tickets/603869?language=en-us\"")
+    @Schema(example = "https://www.ticketmaster.no/event/the-star-wars-music-tickets/603869?language=en-us", defaultValue = "\"N/A\"") //{\"eventURL\":\"https://www.ticketmaster.no/event/the-star-wars-music-tickets/603869?language=en-us\"}
     private String eventURL;
-    @Schema(example = "\"latitude\":\"59.91324\"")
+    @Schema(example = "59.91324", defaultValue = "\"N/A\"") //{\"latitude\":\"59.91324\"}
     private String latitude;
-    @Schema(example = "\"longitude\":\"10.72963\"")
+    @Schema(example = "10.72963", defaultValue = "\"N/A\"") //\{"longitude\":\"10.72963\}"
     private String longitude;
 
     public EventDTO() {

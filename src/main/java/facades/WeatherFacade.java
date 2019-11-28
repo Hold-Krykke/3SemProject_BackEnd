@@ -78,4 +78,8 @@ public class WeatherFacade {
         return getData(url);
     }
 
+    List<WeatherDTO> get5Days(String city) throws NotFoundException {
+        return getData(city);
+    }
+
 }

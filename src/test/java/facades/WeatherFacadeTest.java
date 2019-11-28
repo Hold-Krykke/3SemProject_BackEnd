@@ -129,13 +129,26 @@ public class WeatherFacadeTest {
         SimpleDateFormat d = new SimpleDateFormat("dd");
         String day = d.format(rightNow);
 
-        List<WeatherDTO> weather = facade.get5Days();
+        String city = "Copenhagen";
+        List<WeatherDTO> weather = facade.get5Days(city);
 
         String exp = weather.get(0).getDateTime();
         String res = day + "." + month + "." + year;
 
         assertEquals(exp, res);
-
+    }
+    
+    /*
+    {
+        "code": 400,
+        "message": "Requested city could not be found"
+    }
+    */
+    @Test
+    public void testGetWrongCity() {
+        Assertions.assertThrows(NotFoundException.class, () -> {
+            facade.get5Days("WRONGCITY");
+        });
     }
 
 }

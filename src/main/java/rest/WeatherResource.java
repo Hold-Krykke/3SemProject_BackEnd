@@ -8,6 +8,7 @@ package rest;
 import dto.WeatherDTO;
 import errorhandling.NotFoundException;
 import facades.WeatherFacade;
+import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -40,12 +41,14 @@ public class WeatherResource {
         facade = WeatherFacade.getWeatherFacade();
     }
 
+    @Operation(hidden = true)
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getJson() {
         return facade.getFacadeMessage();
     }
 
+    @Operation(hidden = true)
     @GET
     @Path("/city/{city}/{year}/{month}/{day}")
     @Produces(MediaType.APPLICATION_JSON)

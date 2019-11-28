@@ -25,6 +25,7 @@ public class WeatherFacade {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     private final String oldDateMsg = "I dont think we use the same calendar";
+    private final String wrongCityMsg = "Requested city could not be found";
 
     //Private Constructor to ensure Singleton
     private WeatherFacade() {
@@ -67,7 +68,6 @@ public class WeatherFacade {
                             weatherReports.add(GSON.fromJson(object, WeatherDTO.class));
                         });
                     }
-
                 }
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());

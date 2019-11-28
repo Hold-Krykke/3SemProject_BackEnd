@@ -43,12 +43,12 @@ import javax.ws.rs.core.MediaType;
         },
         servers = {
             @Server(
-                    description = "For Local host testing",
-                    url = "http://localhost:8080/3SEMPROJECT"
+                    description = "For remote testing",
+                    url = "https://runivn.dk/3SEMPROJECT"
             ),
             @Server(
-                    description = "Server API",
-                    url = "https://runivn.dk/3SEMPROJECT"
+                    description = "For local testing",
+                    url = "http://localhost:8080/3SEMPROJECT"
             )
 
         }
@@ -131,16 +131,15 @@ public class CountryResource {
             tags = {"Events"},
             responses = {
                 @ApiResponse(
-                        //content = @Content(mediaType = "application/json", schema = @Schema(implementation = EventDTO.class, required = true))),
                         content = @Content(mediaType = "application/json",
                                 schema = @Schema(implementation = EventDTO.class))),
                 @ApiResponse(responseCode = "200", description = "The Requested list of events"),
                 @ApiResponse(responseCode = "400", description = "Inputdata is not valid<br/>No events for this City exists")})
     public List<EventDTO> getEvents(
             @Parameter(name = "startdate", required = true, description = "YYYY-MM-DD", example = "2019-11-27") @QueryParam("startdate") String startdate,
-            @Parameter(name = "enddate", required = true, description = "YYYY-MM-DD",  example = "2019-11-28")@QueryParam("enddate") String enddate,
-            @Parameter(name = "country", required = true, description = "Country in Europe", example = "Norway")@QueryParam("country") String country,
-            @Parameter(name = "city", required = true, description = "City in Country", example = "Oslo")@QueryParam("city") String city) throws NotFoundException {
+            @Parameter(name = "enddate", required = true, description = "YYYY-MM-DD", example = "2019-11-28") @QueryParam("enddate") String enddate,
+            @Parameter(name = "country", required = true, description = "Country in Europe", example = "Norway") @QueryParam("country") String country,
+            @Parameter(name = "city", required = true, description = "City in Country", example = "Oslo") @QueryParam("city") String city) throws NotFoundException {
         LocationDateDTO locationdate = new LocationDateDTO(startdate, enddate, country, city);
         CityDTO citydto = FACADE.getCountry(country).getSpecificCityByName(city);
         return EVENTFACADE.getApiData(locationdate, citydto);

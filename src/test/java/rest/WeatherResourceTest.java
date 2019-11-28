@@ -30,7 +30,7 @@ public class WeatherResourceTest {
 
     // Change this, if you change URL for country resource endpoint. 
     private final String url = "/weather";
-    private final String testDate = "/city/Copenhagen/1994/10/04";
+    private final String testDate = "/city/Copenhagen/2017/10/04";
 
     private WeatherDTO weatherOne;
     private WeatherDTO weatherTwo;
@@ -102,11 +102,11 @@ public class WeatherResourceTest {
 
     @Test
     public void testGetWeatherData() {
-        bodyTest(url + testDate, 200, "[0].dateTime", weatherOne.getDateTime());
-        bodyTest(url + testDate, 200, "[0].funnyAdvice", weatherOne.getFunnyAdvice());
-        bodyTest(url + testDate, 200, "[0].weatherIcon", weatherOne.getWeatherIcon());
-        bodyTest(url + testDate, 200, "[0].weatherStatus", weatherOne.getWeatherStatus());
-        bodyTest(url + testDate, 200, "[0].windDirection", weatherOne.getWindDirection());
+        bodyTest(testDate, 200, "[0].dateTime", weatherOne.getDateTime());
+        bodyTest(testDate, 200, "[0].funnyAdvice", weatherOne.getFunnyAdvice());
+        bodyTest(testDate, 200, "[0].weatherIcon", weatherOne.getWeatherIcon());
+        bodyTest(testDate, 200, "[0].weatherStatus", weatherOne.getWeatherStatus());
+        bodyTest(testDate, 200, "[0].windDirection", weatherOne.getWindDirection());
         
     }
 

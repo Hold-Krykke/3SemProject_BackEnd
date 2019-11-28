@@ -7,10 +7,7 @@ package facades;
 
 import dto.WeatherDTO;
 import errorhandling.NotFoundException;
-import static io.restassured.RestAssured.given;
 import java.util.List;
-import org.glassfish.grizzly.http.util.HttpStatus;
-import static org.hamcrest.Matchers.equalTo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;

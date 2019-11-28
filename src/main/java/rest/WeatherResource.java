@@ -16,6 +16,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
@@ -48,7 +49,12 @@ public class WeatherResource {
     @GET
     @Path("/city/{city}/{year}/{month}/{day}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<WeatherDTO> getWeather(@QueryParam("city") String city, @QueryParam("year") String year, @QueryParam("month") String month, @QueryParam("day") String day) throws NotFoundException {
+    public List<WeatherDTO> getWeather(
+            @PathParam("city") String city, 
+            @PathParam("year") String year, 
+            @PathParam("month") String month, 
+            @PathParam("day") String day) 
+            throws NotFoundException {
         return facade.getWeather(city, year, month, day);
     }
 

@@ -13,6 +13,7 @@ import errorhandling.NotFoundException;
 import facades.CountryFacade;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -124,17 +125,22 @@ public class CountryResource {
     @Path("/events")
     @Produces(MediaType.APPLICATION_JSON)
     @GET
-    @Operation(summary = "Get all events in a given city, on given date/dates.",
+    @Operation(
+            description = "Through the TicketMaster API, receive the following information given location and a range of days. <br/> For one day results, use same day for both start- and enddate.",
+            summary = "Get all events in a given (European) city, on given date/dates.",
             tags = {"Events"},
             responses = {
                 @ApiResponse(
-                        content = @Content(mediaType = "application/json", schema = @Schema(implementation = EventDTO.class))),
+                        //content = @Content(mediaType = "application/json", schema = @Schema(implementation = EventDTO.class, required = true))),
+                        content = @Content(mediaType = "application/json",
+                                schema = @Schema(implementation = EventDTO.class))),
                 @ApiResponse(responseCode = "200", description = "The Requested list of events"),
                 @ApiResponse(responseCode = "400", description = "Inputdata is not valid<br/>No events for this City exists")})
-    public List<EventDTO> getEvents(@QueryParam("startdate") String startdate,
-            @QueryParam("enddate") String enddate,
-            @QueryParam("country") String country,
-            @QueryParam("city") String city) throws NotFoundException {
+    public List<EventDTO> getEvents(
+            @Parameter(name = "startdate", required = true, description = "YYYY-MM-DD", example = "2019-11-27") @QueryParam("startdate") String startdate,
+            @Parameter(name = "enddate", required = true, description = "YYYY-MM-DD",  example = "2019-11-28")@QueryParam("enddate") String enddate,
+            @Parameter(name = "country", required = true, description = "Country in Europe", example = "Norway")@QueryParam("country") String country,
+            @Parameter(name = "city", required = true, description = "City in Country", example = "Oslo")@QueryParam("city") String city) throws NotFoundException {
         LocationDateDTO locationdate = new LocationDateDTO(startdate, enddate, country, city);
         CityDTO citydto = FACADE.getCountry(country).getSpecificCityByName(city);
         return EVENTFACADE.getApiData(locationdate, citydto);

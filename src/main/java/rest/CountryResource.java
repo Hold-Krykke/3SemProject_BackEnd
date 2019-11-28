@@ -31,7 +31,9 @@ import javax.ws.rs.core.MediaType;
         info = @Info(
                 title = "Hold Krykke Semesterprojekt API",
                 version = "1.0",
-                description = "API related to Cphbusiness 3rd semester CS project.",
+                description = "API related to Cphbusiness 3rd semester CS project.<br/>"
+                + "<b>Terms of Service</b><br/>"
+                + "Rule 1: You may not call the API more than once per second. You can use Thread.sleep(1000);",
                 contact = @Contact(name = "Github Contributors", url = "https://github.com/Hold-Krykke/3SemProject_BackEnd#contributors")
         ),
         tags = {
@@ -40,11 +42,11 @@ import javax.ws.rs.core.MediaType;
         servers = {
             @Server(
                     description = "For Local host testing",
-                    url = "http://localhost:8080/3SEMPROJECT/api/resource/events?"
+                    url = "http://localhost:8080/3SEMPROJECT"
             ),
             @Server(
                     description = "Server API",
-                    url = "https://runivn.dk/3SEMPROJECT/api/resource/events?"
+                    url = "https://runivn.dk/3SEMPROJECT"
             )
 
         }
@@ -60,12 +62,14 @@ public class CountryResource {
         FACADE = CountryFacade.getCountryFacade();
     }
 
+    @Operation(hidden = true)
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String demo() {
         return "{\"msg\":\"Hello World\"}"; //Alternatively use JsonObject
     }
 
+    @Operation(hidden = true)
     @Path("facade")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -79,6 +83,7 @@ public class CountryResource {
      * @param country
      * @return List of 5 cities.
      */
+    @Operation(hidden = true)
     @Path("/{country}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -94,6 +99,7 @@ public class CountryResource {
      * @param alpha2
      * @return Name of country
      */
+    @Operation(hidden = true)
     @Path("countryname/{alpha2}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -123,7 +129,7 @@ public class CountryResource {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json", schema = @Schema(implementation = EventDTO.class))),
                 @ApiResponse(responseCode = "200", description = "The Requested list of events"),
-                @ApiResponse(responseCode = "400", description = "TODO - [INSERT RIGHT ERROR MESSAGE]")})
+                @ApiResponse(responseCode = "400", description = "Inputdata is not valid<br/>No events for this City exists")})
     public List<EventDTO> getEvents(@QueryParam("startdate") String startdate,
             @QueryParam("enddate") String enddate,
             @QueryParam("country") String country,

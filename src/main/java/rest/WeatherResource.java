@@ -60,5 +60,15 @@ public class WeatherResource {
             throws NotFoundException {
         return facade.getWeather(city, year, month, day);
     }
+    
+    @Operation(hidden = true)
+    @GET
+    @Path("/city/{city}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<WeatherDTO> getWeather5Days(
+            @PathParam("city") String city) 
+            throws NotFoundException {
+        return facade.get5Days(city);
+    }
 
 }

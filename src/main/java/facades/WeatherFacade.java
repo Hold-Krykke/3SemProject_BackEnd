@@ -3,6 +3,9 @@ package facades;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import dto.WeatherDTO;
 import errorhandling.NotFoundException;
 import java.io.IOException;
@@ -20,7 +23,7 @@ public class WeatherFacade {
     private final String baseUrl = "https://ajuhlhansen.dk/WeatherCloud/api/weather/city/";
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    
+
     private final String oldDateMsg = "I dont think we use the same calendar";
 
     //Private Constructor to ensure Singleton
@@ -41,6 +44,7 @@ public class WeatherFacade {
     private List<WeatherDTO> getData(String urlFragment) throws NotFoundException {
         String uri = baseUrl + urlFragment;
         List<WeatherDTO> weatherReports = new ArrayList<>();
+        String errorMessage = "";
         try {
             URL url = new URL(uri);
             try {
@@ -53,18 +57,25 @@ public class WeatherFacade {
                     while (scan.hasNext()) {
                         response += scan.nextLine();
                     }
-                    JsonArray array = GSON.fromJson(response, JsonArray.class);
-                    array.forEach(object -> {
-                        weatherReports.add(GSON.fromJson(object, WeatherDTO.class));
-                    });
+                    JsonParser jsonParser = new JsonParser();
+                    JsonElement jsonElement = jsonParser.parse(response);
+                    if (jsonElement.isJsonObject()) {
+                        errorMessage = GSON.fromJson(response, JsonObject.class).toString();
+                    } else if (jsonElement.isJsonArray()) {
+                        JsonArray array = GSON.fromJson(response, JsonArray.class);
+                        array.forEach(object -> {
+                            weatherReports.add(GSON.fromJson(object, WeatherDTO.class));
+                        });
+                    }
+
                 }
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());
-                throw new NotFoundException(oldDateMsg);
+                throw new NotFoundException(errorMessage);
             }
         } catch (MalformedURLException ex) {
             System.out.println(ex.getMessage());
-            throw new NotFoundException(oldDateMsg);
+            throw new NotFoundException(errorMessage);
         }
         return weatherReports;
     }
@@ -74,11 +85,11 @@ public class WeatherFacade {
     }
 
     public List<WeatherDTO> getWeather(String city, String year, String month, String day) throws NotFoundException {
-        String url = ""+city+"/"+year+"/"+month+"/"+day;
+        String url = "" + city + "/" + year + "/" + month + "/" + day;
         return getData(url);
     }
 
-    List<WeatherDTO> get5Days(String city) throws NotFoundException {
+    public List<WeatherDTO> get5Days(String city) throws NotFoundException {
         return getData(city);
     }
 

@@ -97,7 +97,7 @@ public class WeatherResourceTest {
                 .get(url + "/city/Copenhagen/1994/10/04").then()
                 .assertThat()
                 .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode())
-                .body("code", equalTo("I dont think we use the same calendar"));
+                .body("message", equalTo("I dont think we use the same calendar"));
     }
 
     @Test

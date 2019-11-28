@@ -9,6 +9,7 @@ import java.util.Scanner;
 import org.apache.http.client.utils.URIBuilder;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
 import dto.CityDTO;
 import dto.EventDTO;
@@ -58,31 +59,48 @@ public class EventFacade {
         JsonObject response = callApi(uri);
 
         JsonObject validResponse = response.getAsJsonObject("page");
-        if (validResponse == null){
+        if (validResponse == null) {
             throw new NotFoundException("Inputdata is not valid");
         }
         JsonObject embedded = response.getAsJsonObject("_embedded");
-        if (embedded == null){
+        if (embedded == null) {
             throw new NotFoundException("No events for this City exists");
         }
-        
+
         JsonArray array = embedded.getAsJsonArray("events");
         List<EventDTO> events = new ArrayList();
-        
+
         for (int i = 0; i < array.size(); i++) {
-            
             JsonObject event = array.get(i).getAsJsonObject();
             EventDTO eventdto = new EventDTO();
-            eventdto.setEventName(event.get("name").getAsString());
-            eventdto.setEventURL(event.get("url").getAsString());
-            
-            JsonObject dates = event.get("dates").getAsJsonObject().get("start").getAsJsonObject();
-            eventdto.setEventDate(dates.get("localDate").getAsString());
-            
+
+            /*Get name, url data */
+            JsonElement eventName = event.get("name");
+            JsonElement eventURL = event.get("url");
+
+            /*Set data if found*/
+            eventdto.setEventName(eventName == null ? "N/A" : eventName.getAsString());
+            eventdto.setEventURL(eventURL == null ? "N/A" : eventURL.getAsString());
+
+            /*
+            Get and set dates data if found 
+            Logic: if parentElement or its relevant child's child is null, return "N/A" - else, set child's child
+             */
+            JsonObject dates = event.get("dates").getAsJsonObject();
+            eventdto.setEventDate(dates == null || dates.get("start") == null || dates.get("start").getAsJsonObject().get("localDate") == null ? "N/A" : dates.get("start").getAsJsonObject().get("localDate").getAsString());
+
+            /*Get location data */
             JsonObject embeddedVenues = event.getAsJsonObject("_embedded").getAsJsonArray("venues").get(0).getAsJsonObject();
-            eventdto.setEventAddress(embeddedVenues.getAsJsonObject("address").get("line1").getAsString());
-            eventdto.setLatitude(embeddedVenues.getAsJsonObject("location").get("latitude").getAsString());
-            eventdto.setLongitude(embeddedVenues.getAsJsonObject("location").get("longitude").getAsString());
+            JsonObject eventAddress = embeddedVenues.getAsJsonObject("address");
+            JsonObject location = embeddedVenues.getAsJsonObject("location");
+
+            /*
+            Set data if found
+            Logic: if parentElement or its relevant child is null, return "N/A" - else, set child
+             */
+            eventdto.setEventAddress(eventAddress == null || eventAddress.get("line1") == null ? "N/A" : eventAddress.get("line1").getAsString());
+            eventdto.setLatitude(location == null || location.get("latitude") == null ? "N/A" : location.get("latitude").getAsString());
+            eventdto.setLongitude(location == null || location.get("longitude") == null ? "N/A" : location.get("longitude").getAsString());
             events.add(eventdto);
         }
         return events;
@@ -111,11 +129,11 @@ public class EventFacade {
      * The uriBuilder uses the apache Class URIBuilder to create the uri for the
      * ticketmaster API. The API prefers that locations are hashed to a geohash
      * or geopoint and to achieve this we use the library geohash-java
-     * (https://github.com/kungfoo/geohash-java). 
-     * To create the geohash, the latitude and longitude of a location is 
-     * needed along with a value representing the number of characters in the 
-     * geohash. The longer the hash the more precise the location. The ticketmaster
-     * Api doesn't accpet geohashes longer than 9 characters. 
+     * (https://github.com/kungfoo/geohash-java). To create the geohash, the
+     * latitude and longitude of a location is needed along with a value
+     * representing the number of characters in the geohash. The longer the hash
+     * the more precise the location. The ticketmaster Api doesn't accpet
+     * geohashes longer than 9 characters.
      *
      *
      * @param latitude
@@ -136,7 +154,7 @@ public class EventFacade {
             String paramEnd = "endDateTime";
             String key = "apikey";
             String apiKey = "PXLz8SSxwRDS9HUxwZ9LVAkQELNMbma8";
-            
+
             String paramGeohashVal = GeoHash.geoHashStringWithCharacterPrecision(latitude, longitude, 9);
 
             URIBuilder uribuilder = new URIBuilder(baseURL);
@@ -154,9 +172,9 @@ public class EventFacade {
     }
 
     /**
-     * The method that makes the call to the ticketmaster API using the uri build
-     * in the uriBuilder(). 
-     * 
+     * The method that makes the call to the ticketmaster API using the uri
+     * build in the uriBuilder().
+     *
      * @param uri
      * @return String representation of the response
      * @throws errorhandling.NotFoundException

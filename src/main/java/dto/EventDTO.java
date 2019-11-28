@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  *
  * @author Camilla
  */
-@Schema(name = "Event")
+@Schema(name = "Event", description = "Returns the field or 'N/A' if field is not available.")
 public class EventDTO {
 
     @Schema(example = "\"eventName\":\"The Star Wars Music\"")

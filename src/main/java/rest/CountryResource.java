@@ -33,7 +33,8 @@ import javax.ws.rs.core.MediaType;
                 version = "1.0",
                 description = "API related to Cphbusiness 3rd semester CS project.<br/>"
                 + "<b>Terms of Service</b><br/>"
-                + "Rule 1: You may not call the API more than once per second. You can use Thread.sleep(1000);",
+                + "Rule 1: You may not call the API more than once per second. You can use Thread.sleep(1000);<br/>"
+                + "If a field is null from TicketMaster, then this API returns N/A in that field instead of null or no field.",
                 contact = @Contact(name = "Github Contributors", url = "https://github.com/Hold-Krykke/3SemProject_BackEnd#contributors")
         ),
         tags = {

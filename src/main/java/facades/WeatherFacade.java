@@ -42,10 +42,9 @@ public class WeatherFacade {
         return instance;
     }
 
-    private List<WeatherDTO> getData(String urlFragment) throws NotFoundException {
+    private List<WeatherDTO> getData(String urlFragment, String errorMessage) throws NotFoundException {
         String uri = baseUrl + urlFragment;
         List<WeatherDTO> weatherReports = new ArrayList<>();
-        String errorMessage = "";
         try {
             URL url = new URL(uri);
             try {
@@ -58,16 +57,10 @@ public class WeatherFacade {
                     while (scan.hasNext()) {
                         response += scan.nextLine();
                     }
-                    JsonParser jsonParser = new JsonParser();
-                    JsonElement jsonElement = jsonParser.parse(response);
-                    if (jsonElement.isJsonObject()) {
-                        errorMessage = GSON.fromJson(response, JsonObject.class).toString();
-                    } else if (jsonElement.isJsonArray()) {
-                        JsonArray array = GSON.fromJson(response, JsonArray.class);
-                        array.forEach(object -> {
-                            weatherReports.add(GSON.fromJson(object, WeatherDTO.class));
-                        });
-                    }
+                    JsonArray array = GSON.fromJson(response, JsonArray.class);
+                    array.forEach(object -> {
+                        weatherReports.add(GSON.fromJson(object, WeatherDTO.class));
+                    });
                 }
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());
@@ -86,11 +79,11 @@ public class WeatherFacade {
 
     public List<WeatherDTO> getWeather(String city, String year, String month, String day) throws NotFoundException {
         String url = "" + city + "/" + year + "/" + month + "/" + day;
-        return getData(url);
+        return getData(url, this.oldDateMsg);
     }
 
     public List<WeatherDTO> get5Days(String city) throws NotFoundException {
-        return getData(city);
+        return getData(city, this.wrongCityMsg);
     }
 
 }

@@ -3,6 +3,9 @@ package facades;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import dto.WeatherDTO;
 import errorhandling.NotFoundException;
 import java.io.IOException;
@@ -20,8 +23,9 @@ public class WeatherFacade {
     private final String baseUrl = "https://ajuhlhansen.dk/WeatherCloud/api/weather/city/";
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    
+
     private final String oldDateMsg = "I dont think we use the same calendar";
+    private final String wrongCityMsg = "Requested city could not be found";
 
     //Private Constructor to ensure Singleton
     private WeatherFacade() {
@@ -38,7 +42,7 @@ public class WeatherFacade {
         return instance;
     }
 
-    private List<WeatherDTO> getData(String urlFragment) throws NotFoundException {
+    private List<WeatherDTO> getData(String urlFragment, String errorMessage) throws NotFoundException {
         String uri = baseUrl + urlFragment;
         List<WeatherDTO> weatherReports = new ArrayList<>();
         try {
@@ -60,11 +64,11 @@ public class WeatherFacade {
                 }
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());
-                throw new NotFoundException(oldDateMsg);
+                throw new NotFoundException(errorMessage);
             }
         } catch (MalformedURLException ex) {
             System.out.println(ex.getMessage());
-            throw new NotFoundException(oldDateMsg);
+            throw new NotFoundException(errorMessage);
         }
         return weatherReports;
     }
@@ -74,8 +78,12 @@ public class WeatherFacade {
     }
 
     public List<WeatherDTO> getWeather(String city, String year, String month, String day) throws NotFoundException {
-        String url = ""+city+"/"+year+"/"+month+"/"+day;
-        return getData(url);
+        String url = "" + city + "/" + year + "/" + month + "/" + day;
+        return getData(url, this.oldDateMsg);
+    }
+
+    public List<WeatherDTO> get5Days(String city) throws NotFoundException {
+        return getData(city, this.wrongCityMsg);
     }
 
 }

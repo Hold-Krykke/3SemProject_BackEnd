@@ -7,6 +7,9 @@ package facades;
 
 import dto.WeatherDTO;
 import errorhandling.NotFoundException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
@@ -112,6 +115,40 @@ public class WeatherFacadeTest {
         List<WeatherDTO> res = facade.getWeather("Copenhagen", "2017", "10", "04");
         assertTrue(res.contains(weatherOne));
         assertTrue(res.contains(weatherTwo));
+    }
+
+    // https://docs.oracle.com/javase/7/docs/api/java/util/Calendar.html
+    // https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
+    @Test
+    public void testGet5DaysWeather() throws Exception {
+        Date rightNow = Calendar.getInstance().getTime();
+        SimpleDateFormat y = new SimpleDateFormat("yyyy");
+        String year = y.format(rightNow);
+        SimpleDateFormat m = new SimpleDateFormat("MM");
+        String month = m.format(rightNow);
+        SimpleDateFormat d = new SimpleDateFormat("dd");
+        String day = d.format(rightNow);
+
+        String city = "Copenhagen";
+        List<WeatherDTO> weather = facade.get5Days(city);
+
+        String exp = weather.get(0).getDateTime();
+        String res = day + "." + month + "." + year;
+
+        assertEquals(exp, res);
+    }
+    
+    /*
+    {
+        "code": 400,
+        "message": "Requested city could not be found"
+    }
+    */
+    @Test
+    public void testGetWrongCity() {
+        Assertions.assertThrows(NotFoundException.class, () -> {
+            facade.get5Days("WRONGCITY");
+        });
     }
 
 }

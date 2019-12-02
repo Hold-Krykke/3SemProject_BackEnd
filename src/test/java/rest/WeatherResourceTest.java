@@ -6,6 +6,10 @@ import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
 import io.restassured.parsing.Parser;
 import java.net.URI;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import javax.ws.rs.core.UriBuilder;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.util.HttpStatus;
@@ -107,6 +111,34 @@ public class WeatherResourceTest {
         bodyTest(testDate, 200, "[0].weatherStatus", weatherOne.getWeatherStatus());
         bodyTest(testDate, 200, "[0].windDirection", weatherOne.getWindDirection());
         
+    }
+    
+    @Test
+    public void testGet5Days() {
+        Date rightNow = Calendar.getInstance().getTime();
+        SimpleDateFormat y = new SimpleDateFormat("yyyy");
+        String year = y.format(rightNow);
+        SimpleDateFormat m = new SimpleDateFormat("MM");
+        String month = m.format(rightNow);
+        SimpleDateFormat d = new SimpleDateFormat("dd");
+        String day = d.format(rightNow);
+
+        String city = "Copenhagen";
+
+        String res = day + "." + month + "." + year;
+
+        bodyTest("/city/"+city, 200, "[0].dateTime", res);
+    }
+    
+    @Test
+    public void testGet5DaysWrong() {
+        given()
+                .contentType("application/json")
+                .accept("application/json")
+                .get(url + "/city/WRONGCITY").then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode())
+                .body("message", equalTo("Requested city could not be found"));
     }
 
 }

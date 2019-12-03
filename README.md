@@ -12,3 +12,12 @@ Deployed at https://runivn.dk/3SEMPROJECT/
  * [Asger Bjarup](https://github.com/HrBjarup)
  * [Rúni Vedel Niclasen](https://github.com/Runi-VN) 
  * [Malte Hviid-Magnussen](https://github.com/MalteMagnussen)
+ 
+ 
+ ### Special thanks to
+* [REST Countries](http://restcountries.eu/)
+* [GeoNames](http://www.geonames.org/)
+* [Ticketmaster API](https://developer.ticketmaster.com/)
+* [SimpleMaps](https://simplemaps.com/resources/svg-europe)
+* [Hold Chokobananen API](https://ajuhlhansen.dk/WeatherCloud/api/weather)
+ 

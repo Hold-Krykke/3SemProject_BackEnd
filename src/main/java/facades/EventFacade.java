@@ -62,6 +62,9 @@ public class EventFacade {
         if (validResponse == null) {
             throw new NotFoundException("Inputdata is not valid");
         }
+        if (validResponse.get("totalElements").getAsInt() == 0) {
+            throw new NotFoundException("No events found at all");
+        }
         JsonObject embedded = response.getAsJsonObject("_embedded");
         if (embedded == null) {
             throw new NotFoundException("No events for this City exists");

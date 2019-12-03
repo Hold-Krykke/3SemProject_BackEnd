@@ -136,6 +136,7 @@ public class CountryResource {
                 @ApiResponse(responseCode = "200", description = "The Requested list of events"),
                 @ApiResponse(responseCode = "400", description = "Inputdata is not valid"
                         + "<br/>No events for this City exists"
+                        + "<br/>No events found at all"
                         + "<br/>No country by that name exists"
                         + "<br/>Something went wrong with the future: +(elaborate error message)"
                         + "<br/>API request went wrong: +(elaborate error message)"

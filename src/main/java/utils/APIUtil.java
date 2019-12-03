@@ -103,7 +103,7 @@ public class APIUtil {
             try (Scanner scan = new Scanner(connection.getInputStream())) {
                 String response = "";
                 while (scan.hasNext()) {
-                    response += scan.nextLine();
+                    response += new String (scan.nextLine().getBytes("UTF-8"));
                 }
                 JsonParser jsonParser = new JsonParser();
                 JsonElement jsonElement = jsonParser.parse(response);

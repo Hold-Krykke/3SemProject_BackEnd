@@ -134,7 +134,13 @@ public class CountryResource {
                         content = @Content(mediaType = "application/json",
                                 schema = @Schema(implementation = EventDTO.class))),
                 @ApiResponse(responseCode = "200", description = "The Requested list of events"),
-                @ApiResponse(responseCode = "400", description = "Inputdata is not valid<br/>No events for this City exists")})
+                @ApiResponse(responseCode = "400", description = "Inputdata is not valid"
+                        + "<br/>No events for this City exists"
+                        + "<br/>No country by that name exists"
+                        + "<br/>Something went wrong with the future: +(elaborate error message)"
+                        + "<br/>API request went wrong: +(elaborate error message)"
+                        + "<br/>(May return other errors than the ones listed above)"
+                )})
     public List<EventDTO> getEvents(
             @Parameter(name = "startdate", required = true, description = "YYYY-MM-DD", example = "2019-11-27") @QueryParam("startdate") String startdate,
             @Parameter(name = "enddate", required = true, description = "YYYY-MM-DD", example = "2019-11-28") @QueryParam("enddate") String enddate,

@@ -116,7 +116,7 @@ public class CountryResourceTest {
 
     @Test
     public void testWrongGetCountry() throws Exception {
-        bodyTest("/WRONG", 400, "message", "No country by that name exists.");
+        bodyTest("/WRONG", 400, "message", "No country by that name exists");
     }
 
     @Test
@@ -183,7 +183,7 @@ public class CountryResourceTest {
                 .get("/resource/events" + payload_WrongData).then()
                 .assertThat()
                 .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode())
-                .body("message", equalTo("No country by that name exists."));
+                .body("message", equalTo("No country by that name exists"));
     }
 
     /**

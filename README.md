@@ -19,5 +19,10 @@ Deployed at https://runivn.dk/3SEMPROJECT/
 * [GeoNames](http://www.geonames.org/)
 * [Ticketmaster API](https://developer.ticketmaster.com/)
 * [SimpleMaps](https://simplemaps.com/resources/svg-europe)
+* [CatFact](https://catfact.ninja/)
+* [The Internet Chuck Norris Database](http://www.icndb.com/about/)
+* [lukePeavey](https://github.com/lukePeavey/quotable)
 * [Hold Chokobananen API](https://ajuhlhansen.dk/WeatherCloud/api/weather)
+
+
  

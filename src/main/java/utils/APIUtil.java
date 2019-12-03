@@ -115,7 +115,7 @@ public class APIUtil {
                 return response;
             }
         } catch (Exception e) {
-            throw new APIUtilException("API request went wrong:" + e.getMessage());
+            throw new APIUtilException("API request went wrong: " + e.getMessage());
         }
     }
 }

@@ -76,7 +76,7 @@ public class CountryFacade {
             }
         }
         if (country == null) {
-            throw new NotFoundException("No country by that name exists.");
+            throw new NotFoundException("No country by that name exists");
         }
         return country;
     }

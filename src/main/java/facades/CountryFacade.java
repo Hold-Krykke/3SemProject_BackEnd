@@ -44,7 +44,7 @@ public class CountryFacade {
             countries = new ArrayList();
             instance.getEuropeanCountriesAndCities();
         }
-        System.out.println("FACADE.COUNTRIES:\n" + GSON.toJson(countries)); //Use if you want to see data
+        //System.out.println("FACADE.COUNTRIES:\n" + GSON.toJson(countries)); //Use if you want to see data
         return instance;
     }
 

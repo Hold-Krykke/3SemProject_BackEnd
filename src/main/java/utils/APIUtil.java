@@ -100,10 +100,11 @@ public class APIUtil {
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Accept", "application/json;charset=UTF-8");
             connection.setRequestProperty("user-agent", "Application");
-            try (Scanner scan = new Scanner(connection.getInputStream())) {
+            try (Scanner scan = new Scanner(connection.getInputStream(), "UTF-8")) {
                 String response = "";
                 while (scan.hasNext()) {
-                    response += scan.nextLine();
+                     response += scan.nextLine();
+                    //response = response + new String (scan.nextLine().getBytes("UTF-8"));
                 }
                 JsonParser jsonParser = new JsonParser();
                 JsonElement jsonElement = jsonParser.parse(response);

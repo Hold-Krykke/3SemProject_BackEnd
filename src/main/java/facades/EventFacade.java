@@ -190,7 +190,7 @@ public class EventFacade {
             connection.setRequestProperty("Accept", "application/json;charset=UTF-8");
             connection.setRequestProperty("user-agent", "Application");
 
-            try (Scanner scan = new Scanner(connection.getInputStream())) {
+            try (Scanner scan = new Scanner(connection.getInputStream(), "UTF-8")) {
                 String response = "";
                 while (scan.hasNext()) {
                     response += scan.nextLine();

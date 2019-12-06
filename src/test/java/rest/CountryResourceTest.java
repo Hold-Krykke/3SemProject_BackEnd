@@ -200,6 +200,6 @@ public class CountryResourceTest {
                 .get("/resource/events" + payload_NoEvents).then()
                 .assertThat()
                 .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode())
-                .body("message", equalTo("No events for this City exists"));
+                .body("message", equalTo("No events found at all"));
     }
 }

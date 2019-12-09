@@ -51,7 +51,7 @@ public class CountryFacadeTest {
     public void testFacadeCountries() throws NotFoundException {
         //Arrange
         CountryDTO expResult = new CountryDTO("Sweden", "se");
-        CityDTO expResultCity = new CityDTO("Stockholm", "1515017", "59.32938", "18.06871"); //lets hope these values don't change
+        CityDTO expResultCity = new CityDTO("Stockholm", "1515017", "59.33258", "18.0649"); //lets hope these values don't change
         expResult.getCities().add(expResultCity);
 
         //Act

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Disabled;
 
 public class APIUtilTest {
 
@@ -84,6 +85,7 @@ public class APIUtilTest {
      *
      * Tests multiple endpoints, all with multiple objects.
      */
+    @Disabled("This test is disabled until api.quotable.io is available again.")
     @Test
     public void testGetApiData_MultipleEndpoint_Array() throws Exception {
         //Arrange
